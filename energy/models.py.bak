@@ -1,0 +1,67 @@
+from django.db import models
+
+
+
+class registration(models.Model):
+    name = models.CharField(max_length=150)
+    phone = models.CharField(max_length=150)
+    email = models.CharField(max_length=150)
+    password = models.CharField(max_length=150) 
+    address = models.CharField(max_length=150) 
+    location = models.CharField(max_length=150)
+    
+class consumerr(models.Model):
+    name = models.CharField(max_length=150)
+    address = models.CharField(max_length=150)
+    location = models.CharField(max_length=150)
+    phone = models.CharField(max_length=150) 
+    email = models.CharField(max_length=150) 
+    meter_number = models.CharField(max_length=150)  
+    password = models.CharField(max_length=150)  
+
+
+
+
+class bills(models.Model):
+    consumerid = models.CharField(max_length=150)
+    date = models.CharField(max_length=150)
+    bill_amount = models.CharField(max_length=150) 
+    due_date = models.CharField(max_length=150) 
+    status = models.CharField(max_length=150)    
+    cid = models.CharField(max_length=150)    
+
+class news(models.Model):
+    title = models.CharField(max_length=150)
+    description = models.CharField(max_length=150)
+    post_date = models.CharField(max_length=150)
+    
+    
+class analyzing(models.Model):
+    meternumber = models.CharField(max_length=150)
+    currentreading = models.CharField(max_length=150)
+    date = models.CharField(max_length=150)
+    
+class meter(models.Model):
+    meternumber = models.CharField(max_length=150)
+    status = models.CharField(max_length=150)   
+
+class payment(models.Model):
+    billid = models.CharField(max_length=150)
+    paymenttype = models.CharField(max_length=150)
+    bill_amount = models.CharField(max_length=150)
+    cardnum = models.CharField(max_length=150)
+    ccvnum = models.CharField(max_length=150)
+    expdate = models.CharField(max_length=150)
+    status = models.CharField(max_length=150)     
+    date = models.CharField(max_length=150)     
+
+    
+    
+class complaints(models.Model):
+    consumerid = models.CharField(max_length=150)
+    complaintname = models.CharField(max_length=150)
+    description = models.CharField(max_length=150)
+    date = models.CharField(max_length=150)
+    photoss = models.FileField(max_length=150)
+    status = models.CharField(max_length=150)     
+    cid = models.CharField(max_length=150)     

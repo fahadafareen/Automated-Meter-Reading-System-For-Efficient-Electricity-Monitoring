@@ -1,0 +1,23 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% block content %}
+
+<h1>WELCOME TO USER DASHBOARD</h1>
+<a href="{% url 'first' %}">viewprofile</a><br><br>
+<a href="{% url 'first' %}">viewbill</a><br><br>
+<a href="{% url 'first' %}">payment</a><br><br>
+<a href="{% url 'com' %}">complaint</a><br><br>
+<a href="{% url 'first' %}">viewcomplaints</a><br><br>
+<a href="{% url 'first' %}">viewupdates</a><br><br>
+<a href="{% url 'first' %}">Logout</a>
+
+{% endblock %}
+</body>
+</html>

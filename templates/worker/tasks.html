@@ -1,0 +1,92 @@
+{% include "header.html" %}
+{% block content %}
+<div class="energy-section" style="padding-top: 120px;">
+    <div class="section-container">
+        <div class="section-header">
+            <span class="section-tag"><i class="fas fa-list-check"></i> Assignments</span>
+            <h2>Your <span class="text-gradient">Task List</span></h2>
+            <p>Manage and update the progress of your assigned maintenance tasks</p>
+        </div>
+
+        <div class="glass-card" style="margin-top: 2rem;">
+            <div class="card-header-energy">
+                <h4><i class="fas fa-clipboard-list text-accent"></i> Task Overview</h4>
+            </div>
+            <div class="card-body-energy" style="padding: 0;">
+                <div style="overflow-x: auto;">
+                    <table class="table-energy">
+                        <thead>
+                            <tr>
+                                <th>Zone</th>
+                                <th>Date</th>
+                                <th>Details</th>
+                                <th>Current Status</th>
+                                <th>Update Progress</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for task in tasks %}
+                            <tr>
+                                <td>
+                                    <div style="font-weight: 600; color: var(--text-primary);">{{ task.zone_category }}
+                                    </div>
+                                    <div style="font-size: 0.8rem; color: var(--text-muted);">{{ task.zone_name }}</div>
+                                </td>
+                                <td>{{ task.date }}</td>
+                                <td style="max-width: 200px;">{{ task.details }}</td>
+                                <td>
+                                    {% if task.is_completed %}
+                                    <span class="status-badge approved">{{ task.status }}</span>
+                                    {% elif task.is_in_progress %}
+                                    <span class="status-badge active">{{ task.status }}</span>
+                                    {% else %}
+                                    <span class="status-badge pending">{{ task.status }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div style="display: flex; gap: 0.5rem;">
+                                        {% if not task.is_in_progress and not task.is_completed %}
+                                        <form action="{% url 'update_dispatch_status' %}" method="POST">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="task_id" value="{{ task.id }}">
+                                            <input type="hidden" name="status" value="In Progress">
+                                            <button type="submit" class="btn-energy btn-energy-sm btn-energy-primary">
+                                                Start Work
+                                            </button>
+                                        </form>
+                                        {% endif %}
+
+                                        {% if task.is_in_progress %}
+                                        <form action="{% url 'update_dispatch_status' %}" method="POST">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="task_id" value="{{ task.id }}">
+                                            <input type="hidden" name="status" value="Completed">
+                                            <button type="submit" class="btn-energy btn-energy-sm btn-energy-primary"
+                                                style="background: #22c55e;">
+                                                Mark Done
+                                            </button>
+                                        </form>
+                                        {% endif %}
+
+                                        {% if task.is_completed %}
+                                        <span style="color: #22c55e; font-size: 0.85rem;"><i
+                                                class="fas fa-check-double"></i> Finished</span>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                                    No tasks assigned to you.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

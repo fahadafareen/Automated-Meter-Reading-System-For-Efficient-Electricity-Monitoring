@@ -1,0 +1,133 @@
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>EnergyMeter Admin</title>
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+</head>
+
+<body class="admin-body">
+
+  <!-- Admin Sidebar -->
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">⚡</div>
+      <span>EnergyMeter</span>
+    </div>
+    <ul class="sidebar-nav">
+      <li class="nav-label">Main Menu</li>
+      <li><a href="{% url 'dash' %}" class="active"><span class="nav-icon"><i class="fas fa-th-large"></i></span>
+          Dashboard</a></li>
+
+      <li class="nav-label">Management</li>
+      <li><a href="{% url 'addelect' %}"><span class="nav-icon"><i class="fas fa-bolt"></i></span> Add Electricity</a>
+      </li>
+      <li><a href="{% url 'addcon' %}"><span class="nav-icon"><i class="fas fa-user-plus"></i></span> Add Consumer</a>
+      </li>
+      <li><a href="{% url 'addanal' %}"><span class="nav-icon"><i class="fas fa-chart-line"></i></span> Analyze</a></li>
+      <li><a href="{% url 'addbill' %}"><span class="nav-icon"><i class="fas fa-file-invoice-dollar"></i></span> Bill
+          Generation</a></li>
+      <li><a href="{% url 'addnews' %}"><span class="nav-icon"><i class="fas fa-newspaper"></i></span> Add News</a></li>
+
+      <li class="nav-label">Zone & Employees</li>
+      <li><a href="{% url 'zone_status' %}"><span class="nav-icon"><i class="fas fa-map-marked-alt"></i></span> Zone
+          Status Map</a></li>
+      <li><a href="{% url 'dispatch_worker' %}"><span class="nav-icon"><i class="fas fa-shipping-fast"></i></span>
+          Employee Dispatch</a></li>
+      <li><a href="{% url 'view_dispatch' %}"><span class="nav-icon"><i class="fas fa-history"></i></span> Dispatch
+          History</a></li>
+
+      <li class="nav-label">Reports</li>
+      <li><a href="{% url 'analysis_graph' %}"><span class="nav-icon"><i class="fas fa-chart-bar"></i></span> Analysis
+          Graph</a></li>
+      <li><a href="{% url 'viewbill' %}"><span class="nav-icon"><i class="fas fa-receipt"></i></span> View Bills</a>
+      </li>
+      <li><a href="{% url 'viewcon' %}"><span class="nav-icon"><i class="fas fa-users"></i></span> View Consumers</a>
+      </li>
+      <li><a href="{% url 'manage_requests' %}"><span class="nav-icon"><i class="fas fa-clipboard-check"></i></span>
+          Service Requests</a></li>
+      <li><a href="{% url 'admin_simulate_monitoring' %}"><span class="nav-icon"><i
+              class="fas fa-satellite-dish"></i></span>
+          Meter Simulator</a></li>
+      <li><a href="{% url 'viewel' %}"><span class="nav-icon"><i class="fas fa-plug"></i></span> View Electricity</a>
+      </li>
+      <li><a href="{% url 'viewconsumerpayment' %}"><span class="nav-icon"><i class="fas fa-credit-card"></i></span>
+          View Payments</a></li>
+      <li><a href="{% url 'admin_view_complaints' %}"><span class="nav-icon"><i
+              class="fas fa-exclamation-triangle"></i></span>
+          View Complaints</a></li>
+
+      <li><a href="{% url 'admin_chat' %}" style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="display: flex; align-items: center; gap: 10px;">
+            <span class="nav-icon"><i class="fas fa-comments"></i></span> User Chat
+          </span>
+          {% if unread_chats_count > 0 %}
+          <span
+            style="background: #ef4444; color: white; border-radius: 50px; padding: 2px 8px; font-size: 0.65rem; font-weight: 800; box-shadow: 0 0 10px rgba(239, 68, 68, 0.4); margin-right: 15px;">
+            {{ unread_chats_count }}
+          </span>
+          {% endif %}
+        </a>
+      </li>
+
+      <li class="nav-label">Account</li>
+      <li><a href="{% url 'logout' %}"><span class="nav-icon"><i class="fas fa-sign-out-alt"></i></span> Log Out</a>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- Admin Top Bar -->
+  <header class="admin-topbar">
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <button onclick="document.getElementById('adminSidebar').classList.toggle('open')"
+        style="background:none;border:none;color:var(--text-primary);font-size:1.2rem;cursor:pointer;display:none;"
+        class="sidebar-toggle-btn">
+        <i class="fas fa-bars"></i>
+      </button>
+      <h5>Welcome to EnergyMeter Dashboard!</h5>
+    </div>
+    <div class="topbar-actions">
+      <span style="color: var(--text-muted); font-size: 0.85rem;"><i class="fas fa-user-shield"></i> Admin</span>
+    </div>
+  </header>
+
+  <style>
+    @media (max-width: 992px) {
+      .sidebar-toggle-btn {
+        display: block !important;
+      }
+    }
+  </style>
+  <script>
+    // Scroll animations for Admin
+    function animateOnScroll() {
+      var elements = document.querySelectorAll('.animate-on-scroll');
+      elements.forEach(function (el) {
+        var rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 50) {
+          el.classList.add('visible');
+        }
+      });
+    }
+    window.addEventListener('scroll', animateOnScroll);
+    window.addEventListener('load', animateOnScroll);
+
+    // Initial check
+    setTimeout(animateOnScroll, 100);
+  </script>
+
+  {% endblock %}

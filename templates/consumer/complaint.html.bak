@@ -1,0 +1,72 @@
+{% load static %}
+{% block content %}
+{% include 'header.html' %}  
+
+    <!-- END slider -->
+
+    
+<br><br>
+
+
+    <div class="site-section">
+      <div class="container">
+        <div class="row">
+         
+          <div class="col-md-5">
+          
+            <h3 class="heading-92913 text-black">Add complaints</h3>
+            <form action="comp" onsubmit ="return validateForm()" method="POST" class="row" enctype="multipart/form-data">
+			
+			{% csrf_token %}
+
+						{{form.as_p}}
+              
+     
+              <div class="form-group col-md-6">
+                <label for="input-6">complaint</label>
+                <input type="text" class="form-control" name="complaintname" >
+              </div>
+			  				
+				<div class="form-group col-md-6">
+                <label for="input-4">date:</label>
+                <input type="date" class="form-control" name="date" >
+              </div>
+<div class="form-group col-md-12">
+                <label for="input-6">image</label>
+                <input type="file" class="form-control" name="photoss" >
+              </div>
+
+              
+			    <div class="form-group col-md-12">
+				<label for="input-4">description:</label>
+                <textarea cols="10" rows="10" class="form-control" name="description"></textarea>
+              </div>
+			  
+			   
+
+
+				
+				
+
+              
+                
+				<div class="form-group col-md-6">
+                <input type="hidden" value="pending" class="form-control" name="status" >
+              </div>
+
+			
+
+              <div class="form-group col-md-12">
+                <input type="submit" class="btn btn-primary py-3 px-5" name="submit" value="submit">
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+
+   {% include 'footer.html' %}
+   {% endblock %}

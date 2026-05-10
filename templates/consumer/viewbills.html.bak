@@ -1,0 +1,62 @@
+
+
+{% load static %}
+{% block content %}
+{% include 'header.html' %}  
+
+    <!-- END slider -->
+
+    
+<br><br>
+
+
+    <div class="site-section">
+      <div class="container">
+        <div class="row">
+         
+          <div class="col-md-5">
+          
+            <h3 class="heading-92913 text-black">view bill</h3>
+<table class="table" border="1">
+                      <thead>
+                        <tr>
+                          <th><B> CONSUMER-ID: </B></th>
+                          <th> <B>DATE: </B></th>
+                          <th><B>BILL AMOUNT:</B> </th>
+                          <th> <B>  DUE DATE:</B></th>
+                          <th><B>STATUS:</B></th>
+                          <th><B>PAYMENT:</B></th>
+                            
+
+                        </tr>
+                      </thead>
+                      <tbody>
+{% for i in result %}
+                   <tr>
+				   <td>{{i.consumerid}}</td>
+				    <td>{{i.date}}</td>
+				   <td>{{i.bill_amount}}</td>
+				   <td>{{i.due_date}}</td>
+				   <td>{{i.status}}</td>
+				   <td>payment
+				   
+				   				   <a href="{% url 'paybill' id=i.id %}"></a>
+
+				   </td>
+
+				   </tr>
+				   {% endfor %}
+                      </tbody>
+                    </table>
+					
+					
+
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+
+   {% include 'footer.html' %}
+   {% endblock %}

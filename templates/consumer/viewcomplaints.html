@@ -1,0 +1,49 @@
+{% load static %}
+{% block content %}
+{% include 'header.html' %}
+
+<div class="energy-page">
+    <div class="page-container">
+        <div class="page-header-banner animate-on-scroll">
+            <h2><i class="fas fa-clipboard-list text-gradient"></i> View Complaints</h2>
+            <p>All filed complaints overview</p>
+        </div>
+
+        <div class="glass-card animate-on-scroll" style="max-width: 700px; margin: 0 auto;">
+            <div class="card-header-energy">
+                <h4><i class="fas fa-exclamation-circle text-orange"></i> Complaint Details</h4>
+            </div>
+            <div class="card-body-energy">
+                <div style="display: grid; gap: 1rem;">
+                    <div class="profile-detail-item">
+                        <label><i class="fas fa-id-badge"></i> Consumer ID</label>
+                        <span>—</span>
+                    </div>
+                    <div class="profile-detail-item">
+                        <label><i class="fas fa-tag"></i> Complaint</label>
+                        <span>—</span>
+                    </div>
+                    <div class="profile-detail-item">
+                        <label><i class="fas fa-align-left"></i> Description</label>
+                        <span>—</span>
+                    </div>
+                    <div class="profile-detail-item">
+                        <label><i class="fas fa-image"></i> Image</label>
+                        <span>—</span>
+                    </div>
+                    <div class="profile-detail-item">
+                        <label><i class="fas fa-calendar"></i> Date</label>
+                        <span>—</span>
+                    </div>
+                    <div class="profile-detail-item">
+                        <label><i class="fas fa-info-circle"></i> Status</label>
+                        <span>—</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'footer.html' %}
+{% endblock %}

@@ -1,0 +1,187 @@
+{% load static %}
+{% block content %}
+
+{% include 'admin/menu.html' %}
+
+<div class="admin-main">
+  <div class="admin-content">
+    <div class="admin-page-header">
+      <h2><i class="fas fa-file-invoice-dollar text-orange"></i> <span class="text-gradient">Bill Generation</span></h2>
+      <p>Generate electricity bills for consumers</p>
+    </div>
+
+    {% if status == 'success' %}
+    <div
+      style="background: rgba(0, 255, 128, 0.1); border: 1px solid var(--accent-green); color: var(--accent-green); padding: 1rem; border-radius: 12px; margin-bottom: 2rem; display: flex; align-items: center; gap: 10px;">
+      <i class="fas fa-check-circle"></i> Bill generated successfully!
+    </div>
+    {% elif status == 'failed' %}
+    <div
+      style="background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #ef4444; padding: 1rem; border-radius: 12px; margin-bottom: 2rem; display: flex; align-items: center; gap: 10px;">
+      <i class="fas fa-times-circle"></i> {{ error }}
+    </div>
+    {% endif %}
+
+    <div class="glass-card" style="max-width: 600px;">
+      <div class="card-header-energy">
+        <h4><i class="fas fa-receipt text-orange"></i> Generate Bill</h4>
+        <div class="header-icon bg-orange-subtle"><i class="fas fa-file-invoice-dollar text-orange"></i></div>
+      </div>
+      <div class="card-body-energy">
+        <form action="{% url 'billss' %}" method="post" class="form-energy">
+          {% csrf_token %}
+
+          <div class="form-group-energy">
+            <label><i class="fas fa-user-tag"></i> Select Account</label>
+            <select class="form-input" id="account_selector" onchange="fillFields()" required>
+              <option value="">-- Choose Consumer --</option>
+              {% for i in result %}
+              <option value="{{i.name}}" data-meter="{{i.meter_number}}">{{i.name}} ({{i.meter_number}})</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="form-group-energy">
+            <label><i class="fas fa-user"></i> Customer Name</label>
+            <input type="text" id="customer_name_display" class="form-input" readonly name="customer_id"
+              style="background: rgba(0,212,255,0.05);" required>
+          </div>
+
+          <div class="form-group-energy">
+            <label><i class="fas fa-hashtag"></i> Meter Number</label>
+            <input type="text" id="meter_number_display" class="form-input" readonly name="cid"
+              style="background: rgba(0,212,255,0.05);" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group-energy">
+              <label><i class="fas fa-calendar"></i> Date</label>
+              <input type="date" class="form-input" id="billing_date" name="date" value="{{current_date}}"
+                min="{{current_date}}" max="{{current_date}}"
+                onchange="if(this.value != '{{current_date}}') { alert('Invalid date Selected! Only today\'s date is allowed.'); this.value='{{current_date}}'; }"
+                required>
+            </div>
+            <div class="form-group-energy">
+              <label><i class="fas fa-calendar-check"></i> Due Date</label>
+              <input type="date" class="form-input" id="due_date" name="duedate" onchange="checkDate(this)" required>
+              <p id="date-warning" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 5px;">Set a date at
+                least 15 days from billing date.</p>
+            </div>
+          </div>
+
+          <div class="form-row" id="usage-info-row"
+            style="display: none; background: rgba(0, 212, 255, 0.05); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; border: 1px dashed var(--accent-blue);">
+            <div style="flex: 1;">
+              <p style="margin: 0; font-size: 0.8rem; color: var(--text-secondary);">Last Recorded Usage:</p>
+              <h3 id="display-usage" style="margin: 5px 0; color: var(--accent-blue);">0 kWh</h3>
+              <span id="usage-source"
+                style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted);">Source: -</span>
+            </div>
+            <div style="width: 120px;">
+              <label style="font-size: 0.7rem;">Rate (₹/kWh)</label>
+              <input type="number" id="unit_rate" value="7.00" step="0.5" class="form-input"
+                style="padding: 0.3rem 0.5rem; font-size: 0.8rem;">
+            </div>
+          </div>
+
+          <div style="margin-bottom: 1.5rem;">
+            <button type="button" onclick="calculateFromUsage()" class="btn-energy btn-energy-outline btn-energy-sm"
+              style="width: 100%; justify-content: center; border-style: dashed;">
+              <i class="fas fa-calculator"></i> Suggest Amount from Usage
+            </button>
+          </div>
+
+          <div class="form-group-energy">
+            <label><i class="fas fa-money-bill-wave"></i> Bill Amount (₹)</label>
+            <input type="number" id="bill_amount_input" class="form-input" name="amount" step="0.01" min="1"
+              max="100000" placeholder="Enter amount" oninput="checkAmount(this)" required>
+            <p id="amount-warning" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 5px;">Enter a valid
+              amount between ₹1 and ₹100,000.</p>
+          </div>
+
+          <input type="hidden" value="pending" name="status">
+
+          <button type="submit" class="btn-energy btn-energy-primary" style="width: 100%; justify-content: center;">
+            <i class="fas fa-file-circle-plus"></i> Generate Bill
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function fillFields() {
+      const selector = document.getElementById('account_selector');
+      const selectedOption = selector.options[selector.selectedIndex];
+
+      if (selectedOption.value) {
+        document.getElementById('customer_name_display').value = selectedOption.value;
+        document.getElementById('meter_number_display').value = selectedOption.getAttribute('data-meter');
+      } else {
+        document.getElementById('customer_name_display').value = '';
+        document.getElementById('meter_number_display').value = '';
+      }
+    }
+
+    function checkAmount(input) {
+      const val = parseFloat(input.value);
+      const warning = document.getElementById('amount-warning');
+      if (val > 10000) {
+        warning.style.display = 'block';
+        warning.style.color = '#ff6b35';
+        warning.innerHTML = '<i class="fas fa-exclamation-triangle"></i> This amount is unusually high. Please double-check.';
+      } else {
+        warning.style.display = 'none';
+      }
+    }
+
+    function checkDate(input) {
+      const billingDate = new Date(document.getElementById('billing_date').value);
+      const dueDate = new Date(input.value);
+      const warning = document.getElementById('date-warning');
+
+      if (dueDate <= billingDate) {
+        warning.style.display = 'block';
+        warning.style.color = '#ef4444';
+        warning.innerHTML = '<i class="fas fa-times-circle"></i> Due date must be after billing date.';
+        input.setCustomValidity('Due date must be after billing date.');
+      } else {
+        warning.style.display = 'none';
+        input.setCustomValidity('');
+      }
+    }
+
+    async function calculateFromUsage() {
+      const meter = document.getElementById('meter_number_display').value;
+      const name = document.getElementById('customer_name_display').value;
+      const rate = parseFloat(document.getElementById('unit_rate').value) || 7.00;
+
+      if (!meter || !name) {
+        alert("Please select a consumer first.");
+        return;
+      }
+
+      try {
+        const response = await fetch(`/get_meter_usage/?meter=${meter}&name=${name}`);
+        const data = await response.json();
+
+        const usage = data.usage || 0;
+        const amount = (usage * rate).toFixed(2);
+
+        document.getElementById('display-usage').textContent = `${usage} kWh`;
+        document.getElementById('usage-source').textContent = `Source: ${data.source}`;
+        document.getElementById('usage-info-row').style.display = 'flex';
+
+        const amountInput = document.getElementById('bill_amount_input');
+        amountInput.value = amount;
+        checkAmount(amountInput); // trigger warning check
+
+      } catch (err) {
+        console.error("Fetch usage failed:", err);
+        alert("Failed to fetch usage data. Please enter amount manually.");
+      }
+    }
+  </script>
+
+  {% include 'admin/footer.html' %}
+  {% endblock %}

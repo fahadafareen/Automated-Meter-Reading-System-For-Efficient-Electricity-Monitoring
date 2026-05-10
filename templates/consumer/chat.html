@@ -1,0 +1,98 @@
+{% load static %}
+{% block content %}
+{% include 'header.html' %}
+
+<div class="energy-page">
+    <div class="page-container" style="max-width: 860px;">
+        <div class="page-header-banner animate-on-scroll">
+            <h2><i class="fas fa-comments text-gradient"></i> Support Chat</h2>
+            <p>Chat directly with our admin support team</p>
+        </div>
+
+        <div class="glass-card animate-on-scroll" style="padding: 0; overflow: hidden;">
+            <!-- Chat Header -->
+            <div class="card-header-energy">
+                <div style="display:flex; align-items:center; gap:0.8rem;">
+                    <div
+                        style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent-blue),var(--accent-purple));display:flex;align-items:center;justify-content:center;">
+                        <i class="fas fa-headset" style="color:#fff;font-size:1rem;"></i>
+                    </div>
+                    <div>
+                        <h4 style="margin:0;"><i class="fas fa-circle"
+                                style="color:#22c55e;font-size:0.55rem;margin-right:4px;"></i> Admin Support</h4>
+                        <small style="color:var(--text-muted);">Online · EnergyMeter Support</small>
+                    </div>
+                </div>
+                <div class="header-icon bg-blue-subtle"><i class="fas fa-shield-alt text-blue"></i></div>
+            </div>
+
+            <!-- Messages Area -->
+            <div id="chatBox"
+                style="height:420px;overflow-y:auto;padding:1.5rem;display:flex;flex-direction:column;gap:0.8rem;background:rgba(0,0,0,0.15);">
+                {% if not msgs %}
+                <div style="text-align:center;color:var(--text-muted);margin:auto;">
+                    <i class="fas fa-comments"
+                        style="font-size:2.5rem;display:block;margin-bottom:0.6rem;opacity:0.4;"></i>
+                    <p>No messages yet. Start the conversation!</p>
+                </div>
+                {% endif %}
+                {% for m in msgs %}
+                {% if m.sender == uemail %}
+                <!-- Sent (right side) -->
+                <div style="display:flex;justify-content:flex-end;">
+                    <div
+                        style="max-width:70%;background:linear-gradient(135deg,var(--accent-blue),var(--accent-purple));color:#fff;padding:0.75rem 1.1rem;border-radius:18px 18px 4px 18px;box-shadow:0 4px 15px rgba(0,212,255,0.25);word-break:break-word;">
+                        <p style="margin:0;font-size:0.95rem;">{{ m.message }}</p>
+                        <small style="opacity:0.75;font-size:0.7rem;display:block;text-align:right;margin-top:4px;">
+                            {{m.timestamp|date:"d M, H:i" }}</small>
+                    </div>
+                </div>
+                {% else %}
+                <!-- Received (left side) -->
+                <div style="display:flex;justify-content:flex-start;align-items:flex-end;gap:0.5rem;">
+                    <div
+                        style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#16a34a,#22c55e);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <i class="fas fa-headset" style="color:#fff;font-size:0.7rem;"></i>
+                    </div>
+                    <div
+                        style="max-width:70%;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:var(--text-primary);padding:0.75rem 1.1rem;border-radius:18px 18px 18px 4px;word-break:break-word;">
+                        <small
+                            style="color:var(--accent-green);font-weight:600;display:block;margin-bottom:2px;font-size:0.7rem;">Admin</small>
+                        <p style="margin:0;font-size:0.95rem;">{{ m.message }}</p>
+                        <small style="opacity:0.5;font-size:0.7rem;display:block;margin-top:4px;">{{
+                            m.timestamp|date:"dM, H:i" }}</small>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+
+            <!-- Message Input -->
+            <div style="padding:1rem 1.5rem;border-top:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.1);">
+                <form method="POST" action="{% url 'user_chat' %}" id="chatForm"
+                    style="display:flex;gap:0.8rem;align-items:center;">
+                    {% csrf_token %}
+                    <input type="text" name="message" id="msgInput" placeholder="Type your message..."
+                        autocomplete="off"
+                        style="flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:var(--text-primary);border-radius:50px;padding:0.7rem 1.2rem;font-size:0.95rem;outline:none;transition:border 0.2s;"
+                        onfocus="this.style.borderColor='var(--accent-blue)'"
+                        onblur="this.style.borderColor='rgba(255,255,255,0.15)'" required>
+                    <button type="submit"
+                        style="width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--accent-blue),var(--accent-purple));border:none;color:#fff;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(0,212,255,0.35);transition:transform 0.2s;"
+                        onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Auto-scroll to bottom
+    var chatBox = document.getElementById('chatBox');
+    chatBox.scrollTop = chatBox.scrollHeight;
+</script>
+
+{% include 'footer.html' %}
+{% endblock %}

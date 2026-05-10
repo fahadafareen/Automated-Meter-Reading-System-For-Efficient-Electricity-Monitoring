@@ -1,0 +1,215 @@
+from django.http import HttpResponse
+from django.shortcuts import render
+#from .models import testtb
+from django.shortcuts import redirect
+# FILE UPLOAD AND VIEW
+from  django.core.files.storage import FileSystemStorage
+# SESSION
+from django.conf import settings
+from .models import *
+#from .forms import *
+
+
+def logout(request):
+  request.session.clear()
+  return redirect(first)
+
+def first(request):
+    return render (request,'index.html')
+
+def vbill(request):
+    uid=request.session['uid']
+    sel=bills.objects.filter(cid=uid)
+    return render(request,'consumer/viewbills.html',{'result':sel})
+
+def cusview(request):
+    uid=request.session['uid']
+
+    sel=complaints.objects.filter(id=uid)
+    return render(request,'consumer/viewconsumer.html',{'result':sel})
+    
+def curprof(request):
+    uid=request.session['uid']
+    sel=registration.objects.get(id=uid)
+    return render(request,'consumer/viewprofile.html',{'result':sel})    
+
+def curnew(request):
+    sel=news.objects.all()
+    return render(request,'consumer/viewnews.html',{'result':sel})
+
+def dash(request):
+    return render (request,'admin/index.html')
+    
+       
+    
+def addreg(request):
+    if request.method == 'POST':
+        name=request.POST.get('name')
+        phone=request.POST.get('phone')
+        email=request.POST.get('email')
+        password=request.POST.get('password')
+        address=request.POST.get('address')
+        location=request.POST.get('location')
+        # POST, generate bound form with data from the request
+        user=registration(name=name,phone=phone,email=email,password=password,address=address,location=location)
+        user.save()
+        return render(request,'register.html')
+        
+def comp(request):
+     uid=request.session['uid']
+     uname=request.session['uname']
+     if request.method=='POST':
+        complaintname=request.POST.get('complaintname')
+        description=request.POST.get('description')
+        uploaded_file=request.FILES['image']
+        print(uploaded_file)
+        fs = FileSystemStorage()
+        name = fs.save(uploaded_file.name,uploaded_file)
+        date=request.POST.get('date')
+        status=request.POST.get('status')
+        compt=complaints(consumerid=uname,complaintname=complaintname,description=description,photoss=uploaded_file,date=date,status=status,cid=uid)
+        compt.save()    
+        return render(request,'consumer/complaint.html')    
+
+def com(request):
+    return render(request,'consumer/complaint.html')        
+     
+def register(request):
+    return render(request,'register.html')
+
+
+
+def login(request):
+    return render(request,'login.html')
+   
+
+
+def logint(request):
+    email = request.POST.get('email')
+    password = request.POST.get('password')
+    if email == 'admin@gmail.com' and password == 'admin':
+        request.session['logintdetail'] = email
+        request.session['logint'] = 'admin'
+        return render(request, 'admin/index.html')
+
+    elif registration.objects.filter(email=email,password=password).exists():
+        userdetails=registration.objects.get(email=request.POST['email'], password=password)
+        if userdetails.password == request.POST['password']:
+            request.session['uid'] = userdetails.id
+            request.session['uname'] = userdetails.name
+
+            request.session['uemail'] = email
+
+            request.session['user'] = 'user'
+
+            
+            return render(request,'index.html')
+
+    else:
+        return render(request, 'login.html', {'status': 'failed'})
+def index(request):
+    return render (request,'admin/index.html')
+    
+def newss(request):
+     if request.method=='POST':
+        title=request.POST.get('title')
+        description=request.POST.get('description')
+        postdate=request.POST.get('postdate')
+        new=news(title=title,description=description,post_date=postdate)
+        new.save()    
+        return render(request,'admin/news.html')    
+        
+def analyze(request):
+    if request.method=='POST':
+        meternumber=request.POST.get('number')
+        currentreading=request.POST.get('currentreading')
+        date=request.POST.get('date')
+        analyzes=analyzing(meternumber=meternumber,currentreading=currentreading,date=date)
+        analyzes.save()
+        return  render(request,'admin/analyzing.html')
+        
+def mtr(request):
+    if request.method=='POST':
+        meternumber=request.POST.get('number')
+        status=request.POST.get('name')
+        mmeter=meter(meternumber=meternumber,status=status)
+        mmeter.save()
+        return  render(request,'admin/meter.html') 
+
+def pay(request):
+    if request.method=='POST':
+        a=request.POST.get('id')
+        b=request.POST.get('paymenttype')
+        c=request.POST.get('bill_amount')
+        d=request.POST.get('cardnum')
+        e=request.POST.get('ccvnum')
+        f=request.POST.get('expdate')
+        g=request.POST.get('date')
+        h=request.POST.get('status')
+        # POST, generate bound form with data from the request
+        payt=payment(billid=a,paymenttype=b,bill_amount=c,cardnum=d,ccvnum=e,expdate=f,date=g,status=h)
+        payt.save()
+        return  render(request,'consumer/payment.html')        
+
+def paybill(request,id):
+    sel=bills.objects.get(id=id)
+    return render(request,'consumer/payment.html',{'result':sel})    
+
+
+def conss(request):
+    if request.method=='POST':
+        a=request.POST.get('name')
+     
+        f=request.POST.get('meternumber')
+        user=meter.objects.get(meternumber=f)
+        a=user.meternumber
+        status='approved'
+        id=user.id
+        userr=meter(meternumber=a,status=status,id=id)
+        userr.save()
+        # POST, generate bound form with data from the request
+        use=consumerr(name=a,meter_number=f)
+        use.save()
+        return  render(request,'admin/consumer.html')         
+    
+def addelect(request):
+    return render(request,'admin/meter.html')
+    
+def addcon(request):
+    user=registration.objects.all()
+    temp=meter.objects.filter(status='pending')
+    return render(request,'admin/consumer.html',{'result':user,'result1':temp})
+    
+def addanal(request):
+    user=consumerr.objects.all()
+    return render(request,'admin/analyzing.html',{'result':user})
+    
+def addbill(request):
+    sel=registration.objects.all()
+
+    return render(request,'admin/bill.html',{'result':sel})
+    
+def addnews(request):
+    return render(request,'admin/news.html')
+def viewbill(request):
+    sel=bills.objects.all()
+    return render(request,'admin/viewbill.html',{'result':sel})
+def viewcon(request):
+    se=registration.objects.all()
+    return render(request,'admin/viewcons.html',{'result':se})   
+def viewel(request):
+    sel=meter.objects.all()
+    return render(request,'admin/viewelect.html',{'result':sel})    
+    
+def billss(request):
+    if request.method=='POST':
+        a=request.POST.get('cid')
+        b=request.POST.get('date')
+        c=request.POST.get('billamount')
+        d=request.POST.get('duedate')
+        e=request.POST.get('status')
+        f=request.POST.get('customer_id')
+
+        ana=bills(consumerid=a,date=b,bill_amount=c,due_date=d,status=e,cid=f)
+        ana.save()
+        return  render(request,'admin/bill.html')

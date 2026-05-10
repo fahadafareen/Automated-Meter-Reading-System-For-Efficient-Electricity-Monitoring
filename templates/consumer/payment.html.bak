@@ -1,0 +1,79 @@
+{% load static %}
+{% block content %}
+{% include 'header.html' %}  
+
+    <!-- END slider -->
+
+    
+<br><br>
+
+
+    <div class="site-section">
+      <div class="container">
+        <div class="row">
+         
+          <div class="col-md-5">
+          
+            <h3 class="heading-92913 text-black">Payment</h3>
+            <form action="pay" onsubmit ="return validateForm()" method="POST" class="row">
+			
+			{% csrf_token %}
+
+						{{form.as_p}}
+              <div class="form-group col-md-6">
+                <label for="input-1">billid:</label>
+                <input type="text" class="form-control" name="id" required id="fname" >
+              </div>
+     
+              <div class="form-group col-md-6">
+                <label for="input-6">paymenttype</label>
+                <input type="text" class="form-control" name="paymenttype" >
+              </div>
+
+               <div class="form-group col-md-6">
+                <label for="input-6">amount</label>
+                <input type="text" class="form-control" name="bill_amount"  value="{{res.bill_amount}}" readonly>
+              </div>
+			   
+			    <div class="form-group col-md-6">
+                <label for="input-6">card number</label>
+                <input type="text" class="form-control" name="cardnumber" >
+              </div>
+				
+				 <div class="form-group col-md-6">
+                <label for="input-6">ccv number </label>
+                <input type="text" class="form-control" name="ccvnumber" >
+              </div>
+				
+				<div class="form-group col-md-6">
+                <label for="input-4">expiry date:</label>
+                <input type="date" class="form-control" name="expdate" >
+              </div>
+			  
+			   <div class="form-group col-md-6">
+                <label for="input-4">date:</label>
+                <input type="date" class="form-control" name="date" >
+              </div>
+           
+
+                
+				<div class="form-group col-md-6">
+                <input type="hidden" value="pending" class="form-control" name="status" >
+              </div>
+
+			
+
+              <div class="form-group col-md-12">
+                <input type="submit" class="btn btn-primary py-3 px-5" name="submit" value="submit">
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+
+   {% include 'footer.html' %}
+   {% endblock %}

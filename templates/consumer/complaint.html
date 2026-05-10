@@ -1,0 +1,79 @@
+{% load static %}
+{% block content %}
+{% include 'header.html' %}
+
+<div class="energy-page">
+  <div class="page-container">
+    <div class="page-header-banner animate-on-scroll">
+      <h2><i class="fas fa-exclamation-circle text-gradient"></i> File a Complaint</h2>
+      <p>Report any issues and we'll resolve them quickly</p>
+    </div>
+
+    {% if status == 'success' %}
+    <div
+      style="background: rgba(0, 212, 255, 0.1); border: 1px solid var(--accent-blue); color: var(--accent-blue); padding: 1rem; border-radius: 12px; margin-bottom: 2rem; display: flex; align-items: center; gap: 10px;">
+      <i class="fas fa-check-circle"></i> Your complaint has been submitted successfully!
+    </div>
+    {% elif status == 'failed' %}
+    <div
+      style="background: rgba(255, 45, 120, 0.1); border: 1px solid #ff4d4d; color: #ff4d4d; padding: 1rem; border-radius: 12px; margin-bottom: 2rem; display: flex; align-items: center; gap: 10px;">
+      <i class="fas fa-times-circle"></i> {{ error }}
+    </div>
+    {% endif %}
+
+    <div class="glass-card animate-on-scroll" style="max-width: 700px; margin: 0 auto;">
+      <div class="card-header-energy" style="justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <h4><i class="fas fa-plus-circle text-blue"></i> New Complaint</h4>
+        </div>
+        <a href="{% url 'user_chat' %}"
+          style="text-decoration: none; font-size: 0.8rem; color: var(--accent-blue); font-weight: 600;">
+          <i class="fas fa-comments"></i> Chat with Support
+        </a>
+      </div>
+      <div class="card-body-energy">
+        <form action="{% url 'comp' %}" method="POST" class="form-energy" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <div class="form-row">
+            <div class="form-group-energy">
+              <label><i class="fas fa-tag"></i> Complaint Title</label>
+              <input type="text" class="form-input" name="complaintname" placeholder="Brief title of your complaint"
+                pattern=".*[a-zA-Z].*" title="Complaint title must contain at least one letter." required>
+            </div>
+            <div class="form-group-energy">
+              <label><i class="fas fa-calendar"></i> Date</label>
+              <input type="date" class="form-input" name="date" value="{{current_date}}" min="{{current_date}}"
+                max="{{current_date}}"
+                onchange="if(this.value != '{{current_date}}') { alert('Invalid date Selected! Only today\'s date is allowed.'); this.value='{{current_date}}'; }"
+                required>
+            </div>
+          </div>
+
+          <div class="form-group-energy">
+            <label><i class="fas fa-image"></i> Attach Image</label>
+            <input type="file" class="form-input" name="image" style="padding: 0.6rem;" required>
+          </div>
+
+          <div class="form-group-energy">
+            <label><i class="fas fa-align-left"></i> Description</label>
+            <textarea class="form-input" name="description" rows="5" placeholder="Describe your complaint in detail..."
+              minlength="10" title="Please provide a descriptive explanation (minimum 10 characters)."
+              required></textarea>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 5px;">Description should be descriptive
+              and not contain only numbers.</p>
+          </div>
+
+          <input type="hidden" value="pending" name="status">
+
+          <button type="submit" class="btn-energy btn-energy-primary" style="width: 100%; justify-content: center;">
+            <i class="fas fa-paper-plane"></i> Submit Complaint
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include 'footer.html' %}
+{% endblock %}

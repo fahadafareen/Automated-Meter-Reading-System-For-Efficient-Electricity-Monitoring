@@ -1,0 +1,84 @@
+{% load static %}
+{% block content %}
+
+{% include 'admin/menu.html' %}
+
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="row purchace-popup">
+              <div class="col-12 stretch-card grid-margin">
+               
+              </div>
+            </div>
+           <center> <div class="col-md-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Bill generation</h4>
+                    <form action="billss" method="post">
+					
+					{% csrf_token %}
+<table>
+<tr>
+
+<td>
+CUSTOMER NAME:</td><td><select>
+<option>seletct here</option>
+{% for i in result  %}
+<option value="{{i.id}}">{{i.name}}</option>
+{% endfor %}
+</select><br><br>
+</td>
+</tr>
+<tr>
+<td>
+CONSUMER-ID:</td><td><input type="text" name="cid"><br><br>
+</td>
+</tr>
+<tr>
+<td>
+DATE:</td><td><input type="date"  name="date"><br><br>
+</td>
+</tr>
+<tr>
+<td>
+BILL AMOUNT:</td><td><input type="text" name="billamount"><br><br>
+</td>
+</tr>
+<tr>
+<td>
+ DUE DATE:</td><td><input type="date"  name="duedate"><br><br>
+</td>
+</tr>
+<tr>
+<td><input type="hidden" value="pending"  name="status"><br><br>
+</td>
+</tr>
+<tr>
+<td>
+<input type="submit" name="SUBMIT">
+</td>
+</tr>
+</table>
+</form>
+                  </div>
+                </div>
+              </div></center>
+     
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:partials/_footer.html -->
+          
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+ {% include 'admin/footer.html' %}
+
+    {% endblock %}

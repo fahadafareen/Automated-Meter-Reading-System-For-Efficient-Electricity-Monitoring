@@ -1,0 +1,15 @@
+
+
+{% load static %}
+{% block content %}
+
+   <h1>Welcome Admin Dashboard</h1>
+   <a href="{% url 'addelect' %}">Electricty</a><br>
+
+<a href="{% url 'addcon' %}">Consumers</a><br>
+<a href="{% url 'addanal' %}">Analysis</a><br>
+<a href="{% url 'addbill' %}">Bill Generation</a><br>
+<a href="{% url 'addnews' %}">Add News</a><br>
+
+<a href="{% url 'login' %}">logout</a>
+   {% endblock %}

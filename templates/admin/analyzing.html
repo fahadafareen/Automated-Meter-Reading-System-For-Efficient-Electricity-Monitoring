@@ -1,0 +1,67 @@
+{% load static %}
+{% block content %}
+
+{% include 'admin/menu.html' %}
+
+<div class="admin-main">
+  <div class="admin-content">
+    <div class="admin-page-header">
+      <h2><i class="fas fa-chart-line" style="color: #7c3aed;"></i> <span class="text-gradient">Analyze Readings</span>
+      </h2>
+      <p>Record current meter readings</p>
+    </div>
+
+    {% if status == 'success' %}
+    <div
+      style="background: rgba(0, 212, 160, 0.1); border: 1px solid #00d4a0; color: #00d4a0; padding: 1rem; border-radius: 12px; margin-bottom: 2rem; display: flex; align-items: center; gap: 10px; max-width: 600px;">
+      <i class="fas fa-check-circle"></i> Analysis saved successfully!
+    </div>
+    {% elif status == 'failed' %}
+    <div
+      style="background: rgba(255, 45, 120, 0.1); border: 1px solid #ff4d4d; color: #ff4d4d; padding: 1rem; border-radius: 12px; margin-bottom: 2rem; display: flex; align-items: center; gap: 10px; max-width: 600px;">
+      <i class="fas fa-times-circle"></i> {{ error }}
+    </div>
+    {% endif %}
+
+    <div class="glass-card" style="max-width: 600px;">
+      <div class="card-header-energy">
+        <h4><i class="fas fa-tachometer-alt text-blue"></i> Meter Analysis</h4>
+        <div class="header-icon bg-purple-subtle"><i class="fas fa-chart-bar" style="color: #7c3aed;"></i></div>
+      </div>
+      <div class="card-body-energy">
+        <form method="POST" action="{% url 'analyze' %}" class="form-energy">
+          {% csrf_token %}
+
+          <div class="form-group-energy">
+            <label><i class="fas fa-hashtag"></i> Meter Number</label>
+            <select name="number" class="form-input" required>
+              <option value="">Select meter</option>
+              {% for i in result %}
+              <option value="{{i.meter_number}}">{{i.meter_number}}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="form-group-energy">
+            <label><i class="fas fa-gauge-high"></i> Current Reading</label>
+            <input type="text" name="currentreading" class="form-input" placeholder="Enter current reading" required>
+          </div>
+
+          <div class="form-group-energy">
+            <label><i class="fas fa-calendar"></i> Date</label>
+            <input type="date" name="date" class="form-input" value="{{current_date}}" min="{{current_date}}"
+              max="{{current_date}}"
+              onchange="if(this.value != '{{current_date}}') { alert('Invalid date Selected! Only today\'s date is allowed.'); this.value='{{current_date}}'; }"
+              required>
+          </div>
+
+          <button type="submit" class="btn-energy btn-energy-primary" style="width: 100%; justify-content: center;">
+            <i class="fas fa-save"></i> Save Analysis
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  {% include 'admin/footer.html' %}
+  {% endblock %}

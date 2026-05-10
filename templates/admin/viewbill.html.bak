@@ -1,0 +1,93 @@
+{% load static %}
+{% block content %}
+
+{% include 'admin/menu.html' %}
+
+
+         <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="row purchace-popup">
+              <div class="col-12 stretch-card grid-margin">
+
+              </div>
+            </div>
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title"> VIEW B </h3>
+            </div>
+
+              <div class="col-12 grid-margin">
+                <div class="">
+                  <div class="card-body" >
+                    <h4 class="card-title"></h4>
+                    <table class="table" border="1">
+                      <thead>
+                        <tr>
+                          <th><B> CONSUMER-ID: </B></th>
+                          <th> <B>DATE: </B></th>
+                          <th><B>BILL AMOUNT:</B> </th>
+                          <th> <B>  DUE DATE:</B></th>
+                          <th><B>STATUS:</B></th>
+                            
+
+                        </tr>
+                      </thead>
+                      <tbody>
+{% for i in result %}
+                   <tr>
+				   <td>{{i.consumerid}}</td>
+				    <td>{{i.date}}</td>
+				   <td>{{i.bill_amount}}</td>
+				   <td>{{i.due_date}}</td>
+				   <td>{{i.status}}</td>
+
+				   
+				   </tr>
+				   {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+</div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+          </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="{% static 'admin/vendors/js/vendor.bundle.base.js' %}"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="{% static 'admin/vendors/chart.js/Chart.min.js' %}"></script>
+    <script src="{% static 'admin/vendors/moment/moment.min.js' %}"></script>
+    <script src="{% static 'admin/vendors/daterangepicker/daterangepicker.js' %}"></script>
+    <script src="{% static 'admin/vendors/chartist/chartist.min.js' %}"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="{% static 'admin/js/off-canvas.js' %}"></script>
+    <script src="{% static 'admin/js/misc.js' %}"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <script src="{% static 'admin/js/dashboard.js' %}"></script>
+    <!-- End custom js for this page -->
+
+           <div>
+             <footer class="footer">
+            <div class="d-sm-flex justify-content-center justify-content-sm-between">
+              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © Sahla TK.com 2022</span>
+            </div>
+          </footer>
+          <!-- partial -->
+        </div>
+
+  {% endblock %}
+  </body>
+</html>

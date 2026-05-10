@@ -1,0 +1,56 @@
+{% include "header.html" %}
+{% block content %}
+<div class="energy-section" style="padding-top: 120px;">
+    <div class="section-container">
+        <div class="section-header">
+            <span class="section-tag"><i class="fas fa-coins"></i> Billing Service</span>
+            <h2>Change <span class="text-gradient">Tariff Plan</span></h2>
+            <p>Switch to a different billing plan or category</p>
+        </div>
+
+        <div class="glass-card" style="max-width: 600px; margin: 2rem auto;">
+            <div class="card-header-energy">
+                <h4><i class="fas fa-list-ul text-accent"></i> Plan Selection</h4>
+            </div>
+            <div class="card-body-energy">
+                <form action="{% url 'tariff_change' %}" method="POST" class="form-energy">
+                    {% csrf_token %}
+                    <div class="form-group-energy">
+                        <label>Current Plan / Category</label>
+                        <input type="text" name="current_plan" class="form-input" placeholder="e.g. Domestic - Slab 1"
+                            required>
+                    </div>
+
+                    <div class="form-group-energy">
+                        <label>Target Plan / Category</label>
+                        <select name="new_plan" class="form-input" required>
+                            <option value="" disabled selected>Select New Plan</option>
+                            <option value="Residential Standard">Residential Standard</option>
+                            <option value="Time-of-Use (Green)">Time-of-Use (Green Energy Focus)</option>
+                            <option value="Commercial Basic">Commercial Basic</option>
+                            <option value="Industrial High Tension">Industrial High Tension</option>
+                        </select>
+                    </div>
+
+                    <div
+                        style="padding: 1rem; background: rgba(245, 158, 11, 0.05); border-radius: 8px; border-left: 3px solid #f59e0b;">
+                        <p style="margin: 0; font-size: 0.85rem; color: #f59e0b;">
+                            <i class="fas fa-exclamation-circle"></i> Tariff changes applied mid-cycle will reflect in
+                            the next billing statement.
+                        </p>
+                    </div>
+
+                    <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                        <button type="submit" class="btn-energy btn-energy-primary">
+                            <i class="fas fa-sync-alt"></i> Apply Change
+                        </button>
+                        <a href="{% url 'consumer_dash' %}" class="btn-energy btn-energy-outline">
+                            Back
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

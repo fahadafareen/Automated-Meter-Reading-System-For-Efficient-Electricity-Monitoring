@@ -1,0 +1,98 @@
+{% load static %}
+{% block content %}
+{% include 'admin/menu.html' %}
+
+<div class="admin-main">
+    <div class="admin-content">
+        <div class="admin-page-header">
+            <h2><i class="fas fa-map-marked-alt text-blue"></i> <span class="text-gradient">Zone Status Map</span></h2>
+            <p>Monitor zones and their current status with real-time indicators</p>
+            <div style="margin-top: 1.5rem;">
+                <a href="{% url 'add_zone' %}" class="btn-energy btn-energy-primary">
+                    <i class="fas fa-plus"></i> Add New Zone
+                </a>
+            </div>
+        </div>
+
+        <div class="glass-card" style="margin-top: 2rem;">
+            <div class="card-header-energy">
+                <h4><i class="fas fa-layer-group text-accent"></i> Zone List</h4>
+                <div class="header-icon"><i class="fas fa-broadcast-tower text-green"></i></div>
+            </div>
+            <div class="card-body-energy" style="padding: 0;">
+                <div style="overflow-x: auto;">
+                    <table class="table-energy">
+                        <thead>
+                            <tr>
+                                <th>Zone Category</th>
+                                <th>Current Status</th>
+                                <th>Visual Indication</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for zone in zones %}
+                            <tr>
+                                <td style="font-weight: 600; color: var(--text-primary);">{{ zone.category }}</td>
+                                <td>
+                                    {% if zone.status == 'Normal' %}
+                                    <span class="status-badge approved">{{ zone.status }}</span>
+                                    {% elif zone.status == 'Maintenance' %}
+                                    <span class="status-badge"
+                                        style="background: rgba(245, 158, 11, 0.1); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3);">
+                                        {{zone.status }}</span>
+                                    {% elif zone.status == 'Power Outage' %}
+                                    <span class="status-badge pending">{{ zone.status }}</span>
+                                    {% else %}
+                                    <span class="status-badge active">{{ zone.status }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                        {% if zone.status == 'Normal' %}
+                                        <div
+                                            style="width: 12px; height: 12px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 15px rgba(34, 197, 94, 0.6);">
+                                        </div>
+                                        <span style="color: #22c55e; font-size: 0.85rem; font-weight: 500;">Green →
+                                            Normal</span>
+                                        {% elif zone.status == 'Maintenance' %}
+                                        <div
+                                            style="width: 12px; height: 12px; border-radius: 50%; background: #f59e0b; box-shadow: 0 0 15px rgba(245, 158, 11, 0.6);">
+                                        </div>
+                                        <span style="color: #f59e0b; font-size: 0.85rem; font-weight: 500;">Yellow →
+                                            Maintenance</span>
+                                        {% elif zone.status == 'Power Outage' %}
+                                        <div
+                                            style="width: 12px; height: 12px; border-radius: 50%; background: #ef4444; box-shadow: 0 0 15px rgba(239, 68, 68, 0.6);">
+                                        </div>
+                                        <span style="color: #ef4444; font-size: 0.85rem; font-weight: 500;">Red →
+                                            Outage</span>
+                                        {% else %}
+                                        <div
+                                            style="width: 12px; height: 12px; border-radius: 50%; background: var(--accent-blue); box-shadow: 0 0 15px var(--accent-blue);">
+                                        </div>
+                                        <span
+                                            style="color: var(--accent-blue); font-size: 0.85rem; font-weight: 500;">Blue
+                                            → Unknown</span>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                                    <i class="fas fa-info-circle"
+                                        style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i>
+                                    No zones found. Please add a zone to monitor.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include 'admin/footer.html' %}
+</div>
+
+{% endblock %}

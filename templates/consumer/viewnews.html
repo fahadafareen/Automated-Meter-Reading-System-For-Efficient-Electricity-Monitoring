@@ -1,0 +1,73 @@
+{% load static %}
+{% block content %}
+{% include 'header.html' %}
+
+<div class="energy-page">
+  <div class="page-container" style="padding-top: 120px; padding-bottom: 60px;">
+    <div class="page-header-banner animate-on-scroll">
+      <span class="section-tag"><i class="fas fa-rss"></i> Updates</span>
+      <h2>Energy <span class="text-gradient">Bulletin</span></h2>
+      <p>Stay updated with the latest news, announcements, and energy sector alerts</p>
+    </div>
+
+    <div
+      style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2rem; margin-top: 3rem;">
+      {% for i in result %}
+      <div class="glass-card animate-on-scroll"
+        style="height: 100%; display: flex; flex-direction: column; overflow: hidden; transition: transform 0.3s ease;">
+        {% if i.is_alert %}
+        <div
+          style="background: linear-gradient(90deg, #ef4444, #f97316); color: white; padding: 0.5rem 1rem; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">
+          <i class="fas fa-exclamation-triangle"></i> Important Alert
+        </div>
+        {% endif %}
+
+        <div class="card-body-energy" style="flex: 1; padding: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+            <div class="header-icon bg-blue-subtle"
+              style="width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--accent-blue);">
+              <i class="fas fa-newspaper"></i>
+            </div>
+            <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500;">
+              <i class="fas fa-calendar-alt"></i> {{ i.post_date }}
+            </span>
+          </div>
+
+          <h3
+            style="color: var(--text-primary); margin-bottom: 1rem; font-size: 1.25rem; font-weight: 700; line-height: 1.4;">
+            {{ i.title }}</h3>
+          <p style="color: var(--text-secondary); line-height: 1.6; font-size: 0.95rem; margin-bottom: 0;">
+          {{i.description }}</p>
+        </div>
+
+        <div
+          style="padding: 1.2rem 1.5rem; border-top: 1px solid var(--border-glass); background: rgba(255,255,255,0.02);">
+          <span style="font-size: 0.8rem; color: var(--accent-blue); font-weight: 600; cursor: pointer;">
+            Read Full Article <i class="fas fa-arrow-right" style="font-size: 0.7rem; margin-left: 5px;"></i>
+          </span>
+        </div>
+      </div>
+      {% empty %}
+      <div style="grid-column: 1 / -1; text-align: center; padding: 5rem 2rem;">
+        <div
+          style="width: 100px; height: 100px; background: var(--bg-card); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; border: 1px solid var(--border-glass);">
+          <i class="fas fa-newspaper" style="font-size: 3rem; color: var(--text-muted);"></i>
+        </div>
+        <h3 style="color: var(--text-primary);">No News Found</h3>
+        <p style="color: var(--text-muted);">We don't have any updates right now. Please check back later!</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<style>
+  .glass-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border-color: var(--accent-blue) !important;
+  }
+</style>
+
+{% include 'footer.html' %}
+{% endblock %}

@@ -1,0 +1,133 @@
+{% load static %}
+{% block content %}
+
+{% include 'admin/menu.html' %}
+
+<div class="admin-main">
+  <div class="admin-content">
+    <div class="admin-page-header">
+      <h2><i class="fas fa-newspaper" style="color: #ff2d78;"></i> <span class="text-gradient">Add News</span></h2>
+      <p>Post news and announcements for consumers</p>
+    </div>
+
+    {% if status == 'success' %}
+    <div
+      style="background: rgba(0, 212, 255, 0.1); border: 1px solid var(--accent-blue); color: var(--accent-blue); padding: 1rem; border-radius: 12px; margin-bottom: 2rem; display: flex; align-items: center; gap: 10px;">
+      <i class="fas fa-check-circle"></i> News published successfully!
+    </div>
+    {% elif status == 'failed' %}
+    <div
+      style="background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #ef4444; padding: 1rem; border-radius: 12px; margin-bottom: 2rem; display: flex; align-items: center; gap: 10px;">
+      <i class="fas fa-times-circle"></i> {{ error }}
+    </div>
+    {% endif %}
+
+    <div class="glass-card" style="max-width: 600px;">
+      <div class="card-header-energy">
+        <h4><i class="fas fa-bullhorn text-blue"></i> New Post</h4>
+        <div class="header-icon bg-pink-subtle"><i class="fas fa-rss" style="color: #ff2d78;"></i></div>
+      </div>
+      <div class="card-body-energy">
+        <form method="POST" action="{% url 'newss' %}" class="form-energy">
+          {% csrf_token %}
+
+          <div class="form-group-energy">
+            <label><i class="fas fa-heading"></i> Title</label>
+            <input type="text" class="form-input" name="title" placeholder="Enter news title" required>
+          </div>
+
+          <div class="form-group-energy">
+            <label><i class="fas fa-align-left"></i> Description</label>
+            <textarea class="form-input" name="description" rows="4" placeholder="Write news description..."
+              required></textarea>
+          </div>
+
+          <div class="form-group-energy">
+            <label><i class="fas fa-map-marker-alt"></i> Target Zone Scope</label>
+            <select name="target_zone" class="form-input" required>
+              <option value="">-- Choose Target Zone --</option>
+              <option value="All Zones" style="font-weight: 700; color: var(--accent-blue);">📢 All Zones (Global Alert)
+              </option>
+              {% for z in zones %}
+              <option value="{{ z.name }}">{{ z.category }} - {{ z.name }}</option>
+              {% endfor %}
+            </select>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 5px;">Selecting a specific zone will
+              only show this alert to users in that location.</p>
+          </div>
+
+          <div class="form-group-energy">
+            <label><i class="fas fa-calendar"></i> Post Date</label>
+            <input type="date" class="form-input" name="postdate" value="{{current_date}}" min="{{current_date}}"
+              max="{{current_date}}"
+              onchange="if(this.value != '{{current_date}}') { alert('Invalid date Selected! Only today\'s date is allowed.'); this.value='{{current_date}}'; }"
+              required>
+          </div>
+
+          <div class="form-group-energy" style="flex-direction: row; align-items: center; gap: 10px; cursor: pointer;">
+            <input type="checkbox" name="is_alert" id="is_alert" style="width: 20px; height: 20px; cursor: pointer;">
+            <label for="is_alert" style="margin: 0; cursor: pointer;">Mark as High Priority Alert</label>
+          </div>
+
+          <button type="submit" class="btn-energy btn-energy-primary"
+            style="width: 100%; justify-content: center; margin-top: 1rem;">
+            <i class="fas fa-paper-plane"></i> Publish News
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- News Management Section -->
+    <div class="glass-card" style="margin-top: 3rem;">
+      <div class="card-header-energy">
+        <h4><i class="fas fa-tasks text-blue"></i> Manage Posts</h4>
+        <div class="header-icon bg-blue-subtle"><i class="fas fa-edit text-blue"></i></div>
+      </div>
+      <div class="card-body-energy" style="padding: 0;">
+        <div style="overflow-x: auto;">
+          <table class="table-energy">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Title</th>
+                <th>Zone</th>
+                <th>Priority</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for n in all_news %}
+              <tr>
+                <td>{{ n.post_date }}</td>
+                <td style="max-width: 200px; font-weight: 600;">{{ n.title }}</td>
+                <td>{{ n.zone }}</td>
+                <td>
+                  {% if n.is_alert %}
+                  <span class="status-badge rejected">Alert</span>
+                  {% else %}
+                  <span class="status-badge approved">Normal</span>
+                  {% endif %}
+                </td>
+                <td>
+                  <a href="{% url 'delete_news' n.id %}" class="btn-energy btn-energy-sm btn-energy-danger"
+                    onclick="return confirm('Are you sure you want to delete this news?')"
+                    style="padding: 0.4rem 0.8rem;">
+                    <i class="fas fa-trash"></i>
+                  </a>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="5" style="text-align: center; padding: 2rem; color: var(--text-muted);">No posts found.
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include 'admin/footer.html' %}
+  {% endblock %}

@@ -1,0 +1,43 @@
+{% block content %}
+
+<html>
+
+<head>
+    <title>
+        ANALYZING</title>
+</head>
+
+<body>
+    <form method="POST" action="{% url 'analyze' %}">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td>
+                    METER NUMBER:</td>
+                <td><input type="text" name="number"><br><br>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    CURRENT READING:</td>
+                <td><input type="text" name="currentreading"><br><br>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    DATE:</td>
+                <td><input type="date" name="date"><br><br>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit">
+                </td>
+            </tr>
+        </table>
+    </form>
+</body>
+
+</html>
+
+{% endblock %}

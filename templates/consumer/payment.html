@@ -1,0 +1,82 @@
+{% load static %}
+{% block content %}
+{% include 'header.html' %}
+
+<div class="energy-page">
+  <div class="page-container">
+    <div class="page-header-banner animate-on-scroll">
+      <h2><i class="fas fa-credit-card text-gradient"></i> Make Payment</h2>
+      <p>Secure payment for your electricity bill</p>
+    </div>
+
+    <div class="glass-card animate-on-scroll" style="max-width: 700px; margin: 0 auto;">
+      <div class="card-header-energy">
+        <h4><i class="fas fa-shield-alt text-green"></i> Payment Details</h4>
+        <div class="header-icon bg-green-subtle"><i class="fas fa-lock text-green"></i></div>
+      </div>
+      <div class="card-body-energy">
+        <form action="{% url 'pay' %}" method="POST" class="form-energy">
+          {% csrf_token %}
+
+          <div class="form-row">
+            <div class="form-group-energy">
+              <label><i class="fas fa-credit-card"></i> Payment Type</label>
+              <select class="form-input" name="paymenttype" required>
+                <option value="">Select payment type</option>
+                <option value="Credit">Credit Card</option>
+                <option value="Debit">Debit Card</option>
+              </select>
+            </div>
+            <div class="form-group-energy">
+              <label><i class="fas fa-indian-rupee-sign"></i> Bill Amount</label>
+              <input type="text" class="form-input" name="bill_amount" value="{{result.bill_amount}}" readonly
+                style="background: rgba(0,212,255,0.05);">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group-energy">
+              <label><i class="fas fa-user"></i> Card Name</label>
+              <input type="text" class="form-input" name="cardname" placeholder="Name on card" required>
+            </div>
+            <div class="form-group-energy">
+              <label><i class="fas fa-hashtag"></i> Card Number</label>
+              <input type="text" class="form-input" name="cardnumber" placeholder="XXXX XXXX XXXX XXXX" 
+                required maxlength="16" minlength="16" pattern="\d{16}" title="Please enter a 16-digit card number">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group-energy">
+              <label><i class="fas fa-key"></i> CVV</label>
+              <input type="text" class="form-input" name="ccvnumber" placeholder="XXX" required maxlength="4">
+            </div>
+            <div class="form-group-energy">
+              <label><i class="fas fa-calendar"></i> Expiry Date</label>
+              <input type="date" class="form-input" name="expdate" required>
+            </div>
+          </div>
+
+          <div class="form-group-energy">
+            <label><i class="fas fa-calendar-day"></i> Payment Date</label>
+            <input type="date" class="form-input" name="date" value="{{current_date}}" min="{{current_date}}"
+              max="{{current_date}}"
+              onchange="if(this.value != '{{current_date}}') { alert('Invalid date Selected! Only today\'s date is allowed.'); this.value='{{current_date}}'; }"
+              required>
+          </div>
+
+          <input type="hidden" value="paid" name="status">
+          <input type="hidden" value="{{result.id}}" name="bill_id">
+
+          <button type="submit" class="btn-energy btn-energy-green"
+            style="width: 100%; justify-content: center; margin-top: 0.5rem;">
+            <i class="fas fa-check-circle"></i> Pay Now
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include 'footer.html' %}
+{% endblock %}

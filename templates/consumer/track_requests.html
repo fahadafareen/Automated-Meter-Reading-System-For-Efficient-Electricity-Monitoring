@@ -1,0 +1,163 @@
+{% include "header.html" %}
+{% block content %}
+<div class="energy-section" style="padding-top: 120px;">
+    <div class="section-container">
+        <div class="section-header" style="display: flex; justify-content: space-between; align-items: flex-end;">
+            <div>
+                <span class="section-tag"><i class="fas fa-search-location"></i> Tracker</span>
+                <h2>Track <span class="text-gradient">Requests</span></h2>
+                <p>Monitor the real-time status of your service applications</p>
+            </div>
+            <a href="{% url 'consumer_dash' %}" class="btn-energy btn-energy-outline btn-energy-sm"
+                style="margin-bottom: 20px;">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+
+        <div style="display: grid; gap: 2rem; margin-top: 2rem;">
+            <!-- New Connections -->
+            <div class="glass-card">
+                <div class="card-header-energy">
+                    <h4><i class="fas fa-plus-circle text-blue"></i> New Connection Requests</h4>
+                </div>
+                <div class="card-body-energy" style="padding: 0;">
+                    <table class="table-energy">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Phase</th>
+                                <th>Address</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for c in conns %}
+                            <tr>
+                                <td>{{ c.date }}</td>
+                                <td>{{ c.connection_type }}</td>
+                                <td>{{ c.phase }}</td>
+                                <td style="max-width: 200px;">{{ c.address }}</td>
+                                <td><span
+                                        class="status-badge {% if c.status == 'Approved' %}approved{% elif c.status == 'Rejected' %}rejected{% else %}pending{% endif %}">
+                                        {{c.status }}</span></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2rem;">No
+                                    new connection requests.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Solar -->
+            <div class="glass-card">
+                <div class="card-header-energy">
+                    <h4><i class="fas fa-solar-panel text-green"></i> Solar Integration Requests</h4>
+                </div>
+                <div class="card-body-energy" style="padding: 0;">
+                    <table class="table-energy">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Capacity</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for s in solar %}
+                            <tr>
+                                <td>{{ s.date }}</td>
+                                <td>{{ s.solar_capacity }} kW</td>
+                                <td><span
+                                        class="status-badge {% if s.status == 'Approved' %}approved{% elif s.status == 'Rejected' %}rejected{% else %}pending{% endif %}">
+                                        {{s.status }}</span></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" style="text-align: center; color: var(--text-muted); padding: 2rem;">No
+                                    solar requests.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Profile Changes -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem;">
+                <div class="glass-card">
+                    <div class="card-header-energy">
+                        <h4><i class="fas fa-user-edit text-accent"></i> Name Changes</h4>
+                    </div>
+                    <div class="card-body-energy" style="padding: 0;">
+                        <table class="table-energy">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>New Name</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for n in names %}
+                                <tr>
+                                    <td>{{ n.date }}</td>
+                                    <td>{{ n.new_name }}</td>
+                                    <td><span
+                                            class="status-badge {% if n.status == 'Approved' %}approved{% elif n.status == 'Rejected' %}rejected{% else %}pending{% endif %}">
+                                            {{n.status }}</span></td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="3"
+                                        style="text-align: center; color: var(--text-muted); padding: 2rem;">No name
+                                        change requests.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <div class="card-header-energy">
+                        <h4><i class="fas fa-coins text-blue"></i> Tariff Switch</h4>
+                    </div>
+                    <div class="card-body-energy" style="padding: 0;">
+                        <table class="table-energy">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Target Plan</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for t in tariffs %}
+                                <tr>
+                                    <td>{{ t.date }}</td>
+                                    <td>{{ t.new_plan }}</td>
+                                    <td><span
+                                            class="status-badge {% if t.status == 'Approved' %}approved{% elif t.status == 'Rejected' %}rejected{% else %}pending{% endif %}">{{
+                                            t.status }}</span></td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="3"
+                                        style="text-align: center; color: var(--text-muted); padding: 2rem;">No tariff
+                                        requests.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

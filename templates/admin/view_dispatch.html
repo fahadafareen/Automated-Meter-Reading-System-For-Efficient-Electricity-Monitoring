@@ -1,0 +1,63 @@
+{% load static %}
+{% block content %}
+{% include 'admin/menu.html' %}
+
+<div class="admin-main">
+    <div class="admin-content">
+        <div class="admin-page-header">
+            <h2><i class="fas fa-history text-blue"></i> <span class="text-gradient">Dispatch History</span></h2>
+            <p>Track all employee assignments and their current status</p>
+            <div style="margin-top: 1.5rem;">
+                <a href="{% url 'dispatch_worker' %}" class="btn-energy btn-energy-primary">
+                    <i class="fas fa-plus"></i> New Dispatch
+                </a>
+            </div>
+        </div>
+
+        <div class="glass-card" style="margin-top: 2rem;">
+            <div class="card-header-energy">
+                <h4><i class="fas fa-list text-accent"></i> All Assignments</h4>
+                <div class="header-icon"><i class="fas fa-tasks text-blue"></i></div>
+            </div>
+            <div class="card-body-energy" style="padding: 0;">
+                <div style="overflow-x: auto;">
+                    <table class="table-energy">
+                        <thead>
+                            <tr>
+                                <th>Employee Name</th>
+                                <th>Assigned Zone</th>
+                                <th>Date</th>
+                                <th>Details</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in result %}
+                            <tr>
+                                <td style="font-weight: 600; color: var(--text-primary);">{{ item.worker_name }}</td>
+                                <td>{{ item.zone_name }}</td>
+                                <td>{{ item.date }}</td>
+                                <td>{{ item.details }}</td>
+                                <td>
+                                    <span class="status-badge active">{{ item.status }}</span>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                                    <i class="fas fa-info-circle"
+                                        style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i>
+                                    No dispatch history found.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include 'admin/footer.html' %}
+</div>
+
+{% endblock %}

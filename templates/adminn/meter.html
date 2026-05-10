@@ -1,0 +1,36 @@
+{% block content %}
+
+<html>
+
+<head>
+    <title>
+        electricity meter</title>
+</head>
+
+<body>
+    <form method="POST" action="{% url 'mtr' %}">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td>
+                    METER NUMBER:</td>
+                <td><br><br>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    STATUS:</td>
+                <td><input type="text" name="name"><br><br>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" name="SUBMIT">
+                </td>
+            </tr>
+        </table>
+    </form>
+</body>
+
+</html>
+{% endblock %}

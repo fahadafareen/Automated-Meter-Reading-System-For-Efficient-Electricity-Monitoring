@@ -1,0 +1,52 @@
+{% include "header.html" %}
+{% block content %}
+<div class="energy-section" style="padding-top: 120px;">
+    <div class="section-container">
+        <div class="section-header">
+            <span class="section-tag"><i class="fas fa-id-card"></i> Profile Service</span>
+            <h2>Request <span class="text-gradient">Name Change</span></h2>
+            <p>Update the legal name associated with your energy meter</p>
+        </div>
+
+        <div class="glass-card" style="max-width: 600px; margin: 2rem auto;">
+            <div class="card-header-energy">
+                <h4><i class="fas fa-user-tag text-accent"></i> Name Details</h4>
+            </div>
+            <div class="card-body-energy">
+                <form action="{% url 'name_change' %}" method="POST" class="form-energy">
+                    {% csrf_token %}
+                    <div class="form-group-energy">
+                        <label>New Legal Name</label>
+                        <input type="text" name="new_name" class="form-input" placeholder="Full legal name" required>
+                    </div>
+
+                    <div class="form-group-energy">
+                        <label>Reason for Change</label>
+                        <select name="reason" class="form-input" required>
+                            <option value="" disabled selected>Select Reason</option>
+                            <option value="Property Transfer">Property Transfer / Sale</option>
+                            <option value="Legal Correction">Legal Name Correction</option>
+                            <option value="Marriage/Divorce">Marriage / Divorce</option>
+                            <option value="Inheritance">Inheritance</option>
+                        </select>
+                    </div>
+
+                    <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;">
+                        <i class="fas fa-paperclip"></i> Note: You may be required to upload supporting documents (Sale
+                        Deed, ID Proof, etc.) if requested by the admin team during review.
+                    </p>
+
+                    <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                        <button type="submit" class="btn-energy btn-energy-primary">
+                            <i class="fas fa-check-circle"></i> Submit Request
+                        </button>
+                        <a href="{% url 'consumer_dash' %}" class="btn-energy btn-energy-outline">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

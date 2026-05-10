@@ -1,0 +1,78 @@
+{% load static %}
+{% block content %}
+{% include 'header.html' %}
+
+<div class="energy-page">
+  <div class="page-container" style="max-width: 800px; padding-top: 120px;">
+    <div class="page-header-banner animate-on-scroll">
+      <h2><i class="fas fa-user-circle text-gradient"></i> My Profile</h2>
+      <p>Manage your personal account details and preferences</p>
+    </div>
+
+    {% if status == 'success' %}
+    <div
+      style="background: rgba(0, 212, 255, 0.1); border: 1px solid var(--accent-blue); color: var(--accent-blue); padding: 1rem; border-radius: 12px; margin-bottom: 2rem; display: flex; align-items: center; gap: 10px;">
+      <i class="fas fa-check-circle"></i> Profile updated successfully!
+    </div>
+    {% endif %}
+
+    <div class="glass-card animate-on-scroll" style="padding: 0; overflow: hidden;">
+      <div class="card-header-energy"
+        style="background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple)); color: white; border: none;">
+        <h4 style="margin: 0; color: white;"><i class="fas fa-user-edit"></i> Edit Account Settings</h4>
+      </div>
+      <div class="card-body-energy" style="padding: 2.5rem;">
+        <form method="POST" class="form-energy">
+          {% csrf_token %}
+
+          <div style="text-align: center; margin-bottom: 2.5rem;">
+            <div
+              style="width: 80px; height: 80px; background: rgba(0, 212, 255, 0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; border: 2px solid var(--accent-blue);">
+              <i class="fas fa-user" style="font-size: 2.5rem; color: var(--accent-blue);"></i>
+            </div>
+            <h3 style="color: var(--text-primary); margin-bottom: 5px;">{{ result.name }}</h3>
+            <span class="status-badge"
+              style="background: rgba(0, 212, 255, 0.1); color: var(--accent-blue); text-transform: uppercase; font-size: 0.7rem; letter-spacing: 1px;">{{request.session.user }} Account</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="form-group-energy">
+              <label><i class="fas fa-user"></i> Full Name</label>
+              <input type="text" name="name" class="form-input" value="{{ result.name }}" required>
+            </div>
+
+            <div class="form-group-energy">
+              <label><i class="fas fa-envelope"></i> Email Address</label>
+              <input type="email" name="email" class="form-input" value="{{ result.email }}" required>
+            </div>
+
+            <div class="form-group-energy">
+              <label><i class="fas fa-phone"></i> Phone Number</label>
+              <input type="text" name="phone" class="form-input" value="{{ result.phone }}" required>
+            </div>
+
+            <div class="form-group-energy">
+              <label><i class="fas fa-map-marker-alt"></i> Address</label>
+              <input type="text" name="address" class="form-input" value="{{ result.address }}" required>
+            </div>
+
+            <div class="form-group-energy" style="grid-column: span 2;">
+              <label><i class="fas fa-location-dot"></i> Location</label>
+              <input type="text" name="location" class="form-input" value="{{ result.location }}" required>
+            </div>
+          </div>
+
+          <div
+            style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-glass); display: flex; justify-content: center;">
+            <button type="submit" class="btn-energy btn-energy-primary" style="padding: 1rem 3rem;">
+              <i class="fas fa-save"></i> Save Profile Changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include 'footer.html' %}
+{% endblock %}

@@ -1,0 +1,386 @@
+{% load static %}
+{% block content %}
+{% include 'header.html' %}
+
+<style>
+  /* Validation Styles */
+  .form-input.input-error {
+    border-color: #ff2d78 !important;
+    box-shadow: 0 0 0 3px rgba(255, 45, 120, 0.15) !important;
+  }
+
+  .form-input.input-success {
+    border-color: #00d4a0 !important;
+    box-shadow: 0 0 0 3px rgba(0, 212, 160, 0.15) !important;
+  }
+
+  .field-error {
+    color: #ff2d78;
+    font-size: 0.8rem;
+    margin-top: 0.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    min-height: 1.2rem;
+    animation: slideDown 0.2s ease;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Password Strength Meter */
+  .strength-bar-wrap {
+    margin-top: 0.5rem;
+    display: none;
+  }
+
+  .strength-bar-wrap.visible {
+    display: block;
+  }
+
+  .strength-bar-track {
+    height: 5px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .strength-bar-fill {
+    height: 100%;
+    border-radius: 99px;
+    width: 0%;
+    transition: width 0.4s ease, background 0.4s ease;
+  }
+
+  .strength-label {
+    font-size: 0.78rem;
+    margin-top: 0.3rem;
+    font-weight: 500;
+  }
+
+  .strength-checks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .strength-check {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    transition: color 0.2s;
+  }
+
+  .strength-check.ok {
+    color: #00d4a0;
+  }
+
+  .strength-check i {
+    font-size: 0.7rem;
+  }
+</style>
+
+<div class="auth-wrapper">
+  <div class="auth-card auth-card-wide">
+    <div class="auth-header">
+      <div class="auth-icon">👤</div>
+      <h2>Create Account</h2>
+      <p>Join EnergyMeter as a Consumer or Worker</p>
+    </div>
+    <div class="auth-body">
+      {% if status == 'success' %}
+      <div
+        style="background: rgba(0, 212, 160, 0.1); border: 1px solid #00d4a0; color: #00d4a0; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; text-align: center; animation: slideDown 0.3s ease;">
+        <i class="fas fa-check-circle"></i> Account created successfully!
+      </div>
+      {% elif status == 'failed' %}
+      <div
+        style="background: rgba(255, 45, 120, 0.1); border: 1px solid #ff2d78; color: #ff2d78; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; text-align: center; animation: slideDown 0.3s ease;">
+        <i class="fas fa-exclamation-triangle"></i> {{ error_msg|default:"Registration failed. Please try again." }}
+      </div>
+      {% endif %}
+      <form action="{% url 'addreg' %}" onsubmit="return validateForm()" method="POST" class="form-energy" novalidate>
+        {% csrf_token %}
+
+        <!-- Row 1: Name & Role -->
+        <div class="form-row">
+          <div class="form-group-energy">
+            <label for="reg-name"><i class="fas fa-user"></i> Full Name</label>
+            <input type="text" id="reg-name" class="form-input" name="name" placeholder="Enter your full name"
+              autocomplete="name" oninput="validateName()" onblur="validateName()">
+            <div class="field-error" id="err-name"></div>
+          </div>
+
+          <div class="form-group-energy">
+            <label for="reg-role"><i class="fas fa-briefcase"></i> Role / Specialization</label>
+            <select id="reg-role" class="form-input" name="role" onchange="validateRole()" onblur="validateRole()">
+              <option value="">Select account type</option>
+              <option value="User">User</option>
+              <option value="Worker">Worker</option>
+            </select>
+            <div class="field-error" id="err-role"></div>
+          </div>
+        </div>
+
+        <!-- Row 2: Email & Phone -->
+        <div class="form-row">
+          <div class="form-group-energy">
+            <label for="reg-email"><i class="fas fa-envelope"></i> Email Address</label>
+            <input type="email" id="reg-email" class="form-input" name="email" placeholder="Enter your email"
+              autocomplete="email" oninput="validateEmail()" onblur="validateEmail()">
+            <div class="field-error" id="err-email"></div>
+          </div>
+
+          <div class="form-group-energy">
+            <label for="reg-phone"><i class="fas fa-phone"></i> Phone Number</label>
+            <input type="text" id="reg-phone" class="form-input" name="phone" placeholder="10-digit mobile number"
+              maxlength="10" oninput="this.value=this.value.replace(/\D/g,''); validatePhone()"
+              onblur="validatePhone()">
+            <div class="field-error" id="err-phone"></div>
+          </div>
+        </div>
+
+        <!-- Row 3: Password & Confirm -->
+        <div class="form-row">
+          <div class="form-group-energy">
+            <label for="reg-password"><i class="fas fa-lock"></i> Password</label>
+            <div style="position: relative;">
+              <input type="password" id="reg-password" class="form-input" name="password"
+                placeholder="Create a strong password" autocomplete="new-password" style="padding-right: 3rem;"
+                oninput="validatePassword()" onblur="validatePassword()">
+              <button type="button" onclick="togglePass('reg-password','regToggleIcon')"
+                style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1rem;">
+                <i class="fas fa-eye" id="regToggleIcon"></i>
+              </button>
+            </div>
+            <!-- Strength Meter -->
+            <div class="strength-bar-wrap" id="strengthWrap">
+              <div class="strength-bar-track">
+                <div class="strength-bar-fill" id="strengthFill"></div>
+              </div>
+              <div class="strength-label" id="strengthLabel"></div>
+              <div class="strength-checks">
+                <span class="strength-check" id="chk-len"><i class="fas fa-circle"></i> 8+ chars</span>
+                <span class="strength-check" id="chk-upper"><i class="fas fa-circle"></i>
+                  Uppercase</span>
+                <span class="strength-check" id="chk-num"><i class="fas fa-circle"></i> Number</span>
+                <span class="strength-check" id="chk-sym"><i class="fas fa-circle"></i> Symbol</span>
+              </div>
+            </div>
+            <div class="field-error" id="err-password"></div>
+          </div>
+
+          <div class="form-group-energy">
+            <label for="reg-confirm"><i class="fas fa-lock"></i> Confirm Password</label>
+            <div style="position: relative;">
+              <input type="password" id="reg-confirm" class="form-input" name="confirm_password"
+                placeholder="Re-enter your password" autocomplete="new-password" style="padding-right: 3rem;"
+                oninput="validateConfirm()" onblur="validateConfirm()">
+              <button type="button" onclick="togglePass('reg-confirm','confirmToggleIcon')"
+                style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1rem;">
+                <i class="fas fa-eye" id="confirmToggleIcon"></i>
+              </button>
+            </div>
+            <div class="field-error" id="err-confirm"></div>
+          </div>
+        </div>
+
+        <!-- Row 4: Location -->
+        <div class="form-group-energy">
+          <label for="reg-location"><i class="fas fa-location-dot"></i> Service Location</label>
+          <input type="text" id="reg-location" class="form-input" name="location"
+            placeholder="Enter assigned city / location" oninput="validateLocation()" onblur="validateLocation()">
+          <div class="field-error" id="err-location"></div>
+        </div>
+
+        <!-- Row 5: Address -->
+        <div class="form-group-energy">
+          <label for="reg-address"><i class="fas fa-map-marker-alt"></i> Residential Address</label>
+          <textarea id="reg-address" class="form-input" name="address" rows="3"
+            placeholder="Enter your full home address" oninput="validateAddress()"
+            onblur="validateAddress()"></textarea>
+          <div class="field-error" id="err-address"></div>
+        </div>
+
+        <div style="margin-top: 1.5rem;">
+          <button type="submit" id="submitBtn" class="btn-energy btn-energy-green"
+            style="width: 100%; justify-content: center;">
+            <i class="fas fa-user-plus"></i> Create Worker Account
+          </button>
+        </div>
+
+        <div style="text-align: center; margin-top: 1.5rem; color: var(--text-secondary); font-size: 0.9rem;">
+          Already have an account? <a href="{% url 'login' %}"
+            style="color: var(--accent-blue); text-decoration: none; font-weight: 600;">Sign In</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ── Helpers ── */
+  function setError(inputId, errId, msg) {
+    var inp = document.getElementById(inputId);
+    var err = document.getElementById(errId);
+    if (!inp || !err) return false;
+    if (msg) {
+      inp.classList.add('input-error');
+      inp.classList.remove('input-success');
+      err.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + msg;
+    } else {
+      inp.classList.remove('input-error');
+      inp.classList.add('input-success');
+      err.innerHTML = '';
+    }
+    return !msg; // returns true if valid
+  }
+
+  function togglePass(inputId, iconId) {
+    var inp = document.getElementById(inputId);
+    var icon = document.getElementById(iconId);
+    if (inp.type === 'password') {
+      inp.type = 'text';
+      icon.className = 'fas fa-eye-slash';
+    } else {
+      inp.type = 'password';
+      icon.className = 'fas fa-eye';
+    }
+  }
+
+  /* ── Field Validators ── */
+  function validateName() {
+    var val = document.getElementById('reg-name').value.trim();
+    if (!val) return setError('reg-name', 'err-name', 'Full name is required');
+    if (!/^[A-Za-z\s]{2,}$/.test(val)) return setError('reg-name', 'err-name', 'Name must contain only letters (min 2 characters)');
+    return setError('reg-name', 'err-name', '');
+  }
+
+  function validateRole() {
+    var val = document.getElementById('reg-role').value;
+    if (!val) return setError('reg-role', 'err-role', 'Please select a role');
+    return setError('reg-role', 'err-role', '');
+  }
+
+  function validateEmail() {
+    var val = document.getElementById('reg-email').value.trim();
+    if (!val) return setError('reg-email', 'err-email', 'Email address is required');
+    if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(val)) return setError('reg-email', 'err-email', 'Only @gmail.com addresses are permitted');
+    return setError('reg-email', 'err-email', '');
+  }
+
+  function validatePhone() {
+    var val = document.getElementById('reg-phone').value.trim();
+    if (!val) return setError('reg-phone', 'err-phone', 'Phone number is required');
+    if (!/^[6789][0-9]{9}$/.test(val)) return setError('reg-phone', 'err-phone', 'Enter a valid 10-digit Indian mobile number');
+    return setError('reg-phone', 'err-phone', '');
+  }
+
+  function validatePassword() {
+    var val = document.getElementById('reg-password').value;
+    var wrap = document.getElementById('strengthWrap');
+
+    if (!val) {
+      wrap.classList.remove('visible');
+      return setError('reg-password', 'err-password', 'Password is required');
+    }
+    wrap.classList.add('visible');
+
+    var hasLen = val.length >= 8;
+    var hasUpper = /[A-Z]/.test(val);
+    var hasNum = /[0-9]/.test(val);
+    var hasSym = /[^A-Za-z0-9]/.test(val);
+
+    toggleCheck('chk-len', hasLen);
+    toggleCheck('chk-upper', hasUpper);
+    toggleCheck('chk-num', hasNum);
+    toggleCheck('chk-sym', hasSym);
+
+    var score = [hasLen, hasUpper, hasNum, hasSym].filter(Boolean).length;
+    var fill = document.getElementById('strengthFill');
+    var label = document.getElementById('strengthLabel');
+    var configs = [
+      { w: '25%', c: '#ff2d78', t: 'Weak' },
+      { w: '50%', c: '#ff8c00', t: 'Fair' },
+      { w: '75%', c: '#f0c040', t: 'Good' },
+      { w: '100%', c: '#00d4a0', t: 'Strong' }
+    ];
+    var cfg = configs[score - 1] || configs[0];
+    fill.style.width = cfg.w;
+    fill.style.background = cfg.c;
+    label.textContent = cfg.t;
+    label.style.color = cfg.c;
+
+    if (!hasLen) return setError('reg-password', 'err-password', 'Password must be at least 8 characters');
+    if (score < 3) return setError('reg-password', 'err-password', 'Password is too weak');
+    setError('reg-password', 'err-password', '');
+    if (document.getElementById('reg-confirm').value) validateConfirm();
+    return true;
+  }
+
+  function toggleCheck(id, ok) {
+    var el = document.getElementById(id);
+    if (ok) {
+      el.classList.add('ok');
+      el.querySelector('i').className = 'fas fa-check-circle';
+    } else {
+      el.classList.remove('ok');
+      el.querySelector('i').className = 'fas fa-circle';
+    }
+  }
+
+  function validateConfirm() {
+    var pass = document.getElementById('reg-password').value;
+    var confirm = document.getElementById('reg-confirm').value;
+    if (!confirm) return setError('reg-confirm', 'err-confirm', 'Please confirm your password');
+    if (pass !== confirm) return setError('reg-confirm', 'err-confirm', 'Passwords do not match');
+    return setError('reg-confirm', 'err-confirm', '');
+  }
+
+  function validateAddress() {
+    var val = document.getElementById('reg-address').value.trim();
+    if (!val) return setError('reg-address', 'err-address', 'Address is required');
+    if (val.length < 10) return setError('reg-address', 'err-address', 'Please enter a complete address');
+    return setError('reg-address', 'err-address', '');
+  }
+
+  function validateLocation() {
+    var val = document.getElementById('reg-location').value.trim();
+    if (!val) return setError('reg-location', 'err-location', 'Location is required');
+    return setError('reg-location', 'err-location', '');
+  }
+
+  function validateForm() {
+    var results = [
+      validateName(),
+      validateRole(),
+      validateEmail(),
+      validatePhone(),
+      validatePassword(),
+      validateConfirm(),
+      validateAddress(),
+      validateLocation()
+    ];
+    var allValid = results.every(Boolean);
+    if (!allValid) {
+      var firstError = document.querySelector('.input-error');
+      if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    return allValid;
+  }
+</script>
+
+{% include 'footer.html' %}
+{% endblock %}

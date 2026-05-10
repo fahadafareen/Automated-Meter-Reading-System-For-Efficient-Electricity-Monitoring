@@ -1,0 +1,54 @@
+{% load static %}
+{% block content %}
+
+{% include 'admin/menu.html' %}
+
+<div class="admin-main">
+  <div class="admin-content">
+    <div class="admin-page-header">
+      <h2><i class="fas fa-plug text-orange"></i> <span class="text-gradient">View Electricity</span></h2>
+      <p>All registered electricity meters</p>
+    </div>
+
+    <div class="glass-card">
+      <div class="card-header-energy">
+        <h4><i class="fas fa-bolt text-blue"></i> Meter Records</h4>
+        <div class="header-icon bg-orange-subtle"><i class="fas fa-plug text-orange"></i></div>
+      </div>
+      <div class="card-body-energy" style="padding: 0;">
+        <div style="overflow-x: auto;">
+          <table class="table-energy">
+            <thead>
+              <tr>
+                <th>Meter Number</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for i in result %}
+              <tr>
+                <td><strong style="color: var(--text-primary);">{{i.meternumber}}</strong></td>
+                <td>
+                  <span
+                    class="status-badge {% if i.status == 'pending' %}pending{% elif i.status == 'approved' %}approved{% else %}active{% endif %}">
+                    {{i.status}}
+                  </span>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="2" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                  <i class="fas fa-plug" style="font-size: 2rem; display: block; margin-bottom: 0.8rem;"></i>
+                  No meters registered yet.
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include 'admin/footer.html' %}
+  {% endblock %}

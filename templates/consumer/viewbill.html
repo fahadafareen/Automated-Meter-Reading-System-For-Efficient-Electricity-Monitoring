@@ -1,0 +1,60 @@
+{% load static %}
+{% block content %}
+{% include 'header.html' %}
+
+<div class="energy-page">
+  <div class="page-container">
+    <div class="page-header-banner animate-on-scroll">
+      <h2><i class="fas fa-file-invoice text-gradient"></i> Bill Details</h2>
+      <p>View your electricity billing history</p>
+    </div>
+
+    <div class="glass-card animate-on-scroll">
+      <div class="card-header-energy">
+        <h4><i class="fas fa-receipt text-blue"></i> Billing Records</h4>
+        <div class="header-icon bg-green-subtle"><i class="fas fa-file-invoice-dollar text-green"></i></div>
+      </div>
+      <div class="card-body-energy" style="padding: 0;">
+        <div style="overflow-x: auto;">
+          <table class="table-energy">
+            <thead>
+              <tr>
+                <th>Consumer ID</th>
+                <th>Date</th>
+                <th>Amount (₹)</th>
+                <th>Due Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for i in result %}
+              <tr>
+                <td><strong style="color: var(--text-primary);">{{i.consumerid}}</strong></td>
+                <td>{{i.date}}</td>
+                <td><span style="color: var(--accent-green); font-weight: 600;">₹{{i.bill_amount}}</span></td>
+                <td>{{i.due_date}}</td>
+                <td>
+                  <span
+                    class="status-badge {% if i.status == 'pending' %}pending{% elif i.status == 'paid' %}paid{% endif %}">
+                    {{i.status}}
+                  </span>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="5" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                  <i class="fas fa-file-invoice" style="font-size: 2rem; display: block; margin-bottom: 0.8rem;"></i>
+                  No bills found.
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

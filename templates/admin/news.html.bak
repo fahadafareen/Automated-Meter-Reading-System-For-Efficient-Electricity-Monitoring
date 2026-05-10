@@ -1,0 +1,65 @@
+{% load static %}
+{% block content %}
+
+{% include 'admin/menu.html' %}
+
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="row purchace-popup">
+              <div class="col-12 stretch-card grid-margin">
+               
+              </div>
+            </div>
+           <center> <div class="col-md-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">ADD NEWS</h4>
+                    <form method="POST" enctype="multipart/form-data" action="newss">
+{% csrf_token %}
+<table>
+<tr><td>
+TITLE:</td><td><input type="text"  required class="form-control" name="title"><br><br>
+</td>
+</tr>
+<tr>
+<td>
+DESCRIPTION:</td><td><input type="text" required class="form-control"  name="description"><br><br>
+</td>
+</tr>
+<tr>
+
+<tr>
+<td>
+ POST DATE:</td><td><input type="date"  required class="form-control"  name="postdate"><br><br>
+</td>
+</tr>
+
+<tr>
+<td>
+<input type="submit" name="submit" >
+</td>
+</tr>
+</table>
+</form>
+                  </div>
+                </div>
+              </div></center>
+     
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:partials/_footer.html -->
+          
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+ {% include 'admin/footer.html' %}
+
+    {% endblock %}

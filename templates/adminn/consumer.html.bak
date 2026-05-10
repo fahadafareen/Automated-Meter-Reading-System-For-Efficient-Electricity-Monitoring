@@ -1,0 +1,42 @@
+
+
+{% block content %}
+<html>
+<head>
+<title>
+CONSUMER</title>
+</head>
+<body>
+<form>
+<table>
+<tr><td>
+NAME:</td><td><input type="text" name="name"><br><br>
+</td></tr>
+<tr><td>
+ADDRESS:</td><td><input type="text" name="address"><br><br>
+</td></tr>
+<tr><td>
+LOCATION:</td><td><input type="text" name="location"><br><br>
+</td></tr>
+<tr><td>
+PHONE NUMBER:</td><td><input type="text" name="phone"><br><br>
+</td></tr>
+<tr><td>
+EMAIL: </td><td><input type="text" name="email"><br><br>
+</td></tr>
+<tr><td>
+METER-ID:</td><td><input type="text" name="meterid"><br><br>
+</td></tr>
+<tr><td>
+PASSWORD:</td><td><input type="text" name="password"><br><br>
+</td></tr>
+<tr><td>
+<input type="submit" name="SUBMIT">
+</td></tr>
+</table>
+</form>
+</body>
+</html>
+
+
+{% endblock  %}

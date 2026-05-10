@@ -1,0 +1,58 @@
+{% include "header.html" %}
+{% block content %}
+<div class="energy-section" style="padding-top: 120px;">
+    <div class="section-container">
+        <div class="section-header">
+            <span class="section-tag"><i class="fas fa-credit-card"></i> Payment Ledger</span>
+            <h2>Transaction <span class="text-gradient">History</span></h2>
+            <p>Review your past payments and download official receipts</p>
+        </div>
+
+        <div class="glass-card animate-on-scroll" style="margin-top: 2rem;">
+            <div class="card-header-energy">
+                <h4><i class="fas fa-history text-blue"></i> Completed Payments</h4>
+            </div>
+            <div class="card-body-energy" style="padding: 0;">
+                <div style="overflow-x: auto;">
+                    <table class="table-energy">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Payment Type</th>
+                                <th>Card Name</th>
+                                <th>Amount (₹)</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for h in history %}
+                            <tr>
+                                <td>{{ h.date }}</td>
+                                <td>{{ h.paymenttype }}</td>
+                                <td>{{ h.cardname }}</td>
+                                <td><strong style="color: var(--accent-green);">₹{{ h.bill_amount }}</strong></td>
+                                <td><span class="status-badge approved">{{ h.status }}</span></td>
+                                <td>
+                                    <a href="{% url 'download_receipt' id=h.id %}" target="_blank"
+                                        class="btn-energy btn-energy-sm btn-energy-outline"
+                                        style="border-color: var(--accent-blue); color: var(--accent-blue);">
+                                        <i class="fas fa-download"></i> Receipt
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                                    No payment records found.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

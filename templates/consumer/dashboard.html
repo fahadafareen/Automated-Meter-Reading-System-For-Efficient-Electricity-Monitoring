@@ -1,0 +1,520 @@
+{% include "header.html" %}
+{% block content %}
+<div class="energy-section" style="padding-top: 120px;">
+    <div class="section-container">
+        <!-- Emergency Outage Alerts -->
+        {% if emergencies %}
+        <div class="emergency-alerts" style="margin-bottom: 2rem;">
+            {% for outage in emergencies %}
+            {% if outage.name == user_location %}
+            <div class="glass-card"
+                style="border: 2px solid #ef4444; background: rgba(239, 68, 68, 0.15); box-shadow: 0 0 30px rgba(239, 68, 68, 0.3); animation: emergencyPulse 1.5s infinite; margin-bottom: 1.5rem; position: relative;">
+                <button onclick="this.parentElement.style.display='none'"
+                    style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #ef4444; cursor: pointer; z-index: 10;">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="card-body-energy" style="display: flex; align-items: center; gap: 1.5rem; padding: 1.8rem;">
+                    <div
+                        style="width: 70px; height: 70px; background: #ef4444; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; color: white; box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);">
+                        <i class="fas fa-radiation"></i>
+                    </div>
+                    <div style="flex: 1;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                            <span
+                                style="background: #ef4444; color: white; font-size: 0.75rem; font-weight: 800; padding: 3px 10px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; animation: blink 1s infinite;">Urgent
+                                Alert</span>
+                            <h3
+                                style="margin: 0; color: #ef4444; font-family: 'Outfit', sans-serif; font-size: 1.5rem;">
+                                Outage in Your Location!</h3>
+                        </div>
+                        <p style="margin: 0; font-size: 1.2rem; color: var(--text-primary); font-weight: 600;">
+                            A critical power outage is affecting <span style="text-decoration: underline;">{{outage.name
+                                }}</span> (Your location).
+                        </p>
+                        <div
+                            style="margin-top: 10px; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px; border-left: 3px solid #ef4444;">
+                            <p style="margin: 0; font-size: 0.95rem; color: var(--text-secondary);">
+                                <i class="fas fa-info-circle"></i> Emergency repairs are currently underway. We
+                                apologize for the inconvenience.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="glass-card"
+                style="border: 1px solid rgba(239, 68, 68, 0.5); background: rgba(239, 68, 68, 0.05); margin-bottom: 1rem; position: relative;">
+                <button onclick="this.parentElement.style.display='none'"
+                    style="position: absolute; top: 10px; right: 15px; background: none; border: none; color: #ef4444; cursor: pointer;">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="card-body-energy" style="display: flex; align-items: center; gap: 1rem; padding: 1.2rem;">
+                    <div style="font-size: 1.5rem; color: #ef4444;"><i class="fas fa-exclamation-circle"></i></div>
+                    <div style="flex: 1;">
+                        <h4 style="margin: 0; color: var(--text-primary);">Regional Outage: {{ outage.name }}</h4>
+                        <p style="margin: 0; font-size: 0.9rem; color: var(--text-secondary);">Operational issues
+                            reported in {{ outage.category }}.</p>
+                    </div>
+                    <span class="status-badge pending" style="font-size: 0.7rem;">Active Outage</span>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+
+        <style>
+            @keyframes emergencyPulse {
+                0% {
+                    box-shadow: 0 0 15px rgba(239, 68, 68, 0.2);
+                    border-color: rgba(239, 68, 68, 0.5);
+                    transform: scale(1);
+                }
+
+                50% {
+                    box-shadow: 0 0 35px rgba(239, 68, 68, 0.5);
+                    border-color: rgba(239, 68, 68, 1);
+                    transform: scale(1.005);
+                }
+
+                100% {
+                    box-shadow: 0 0 15px rgba(239, 68, 68, 0.2);
+                    border-color: rgba(239, 68, 68, 0.5);
+                    transform: scale(1);
+                }
+            }
+
+            @keyframes blink {
+
+                0%,
+                100% {
+                    opacity: 1;
+                }
+
+                50% {
+                    opacity: 0.5;
+                }
+            }
+        </style>
+        {% endif %}
+
+        <!-- Alert Messages Section -->
+        {% if alerts %}
+        <div class="alerts-container" style="margin-bottom: 2rem;">
+            {% for alert in alerts %}
+            <div class="glass-card"
+                style="border-left: 4px solid #ef4444; margin-bottom: 1rem; background: rgba(239, 68, 68, 0.05); position: relative;">
+                <!-- Dismiss button -->
+                <button onclick="this.parentElement.style.display='none'"
+                    style="position: absolute; top: 10px; right: 15px; background: none; border: none; color: #ef4444; cursor: pointer; opacity: 0.6; transition: opacity 0.3s;"
+                    onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="card-body-energy" style="display: flex; align-items: center; gap: 1rem; padding: 1.2rem;">
+                    <div style="font-size: 1.5rem; color: #ef4444;"><i class="fas fa-bullhorn"></i></div>
+                    <div style="flex: 1;">
+                        <span
+                            style="font-size: 0.75rem; color: #ef4444; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Priority
+                            Alert</span>
+                        <h4 style="margin: 4px 0; color: var(--text-primary);">{{ alert.title }}</h4>
+                        <p style="margin: 0; font-size: 0.9rem; color: var(--text-secondary);">{{ alert.description }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if status == 'success' %}
+        <div class="glass-card"
+            style="border: 1px solid var(--accent-green); background: rgba(0, 255, 136, 0.1); margin-bottom: 2rem; padding: 1.2rem; display: flex; align-items: center; gap: 10px;">
+            <i class="fas fa-check-circle text-green" style="font-size: 1.5rem;"></i>
+            <div>
+                <h4 style="margin: 0; color: var(--text-primary);">Success!</h4>
+                <p style="margin: 0; font-size: 0.9rem; color: var(--text-secondary);">Your request has been processed
+                    successfully.</p>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Premium Dashboard Hero -->
+        <div class="glass-card animate-on-scroll"
+            style="padding: 2.5rem; margin-bottom: 2.5rem; background: linear-gradient(135deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.6) 100%); border: 1px solid rgba(255,255,255,0.08); overflow: hidden; position: relative;">
+            <!-- Decorative background elements -->
+            <div
+                style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: var(--accent-blue); filter: blur(100px); opacity: 0.15; pointer-events: none;">
+            </div>
+            <div
+                style="position: absolute; bottom: -50px; left: -50px; width: 150px; height: 150px; background: var(--accent-purple); filter: blur(80px); opacity: 0.1; pointer-events: none;">
+            </div>
+
+            <div
+                style="display: flex; flex-wrap: wrap; gap: 2.5rem; align-items: center; position: relative; z-index: 1;">
+                <!-- Profile Section -->
+                <div style="display: flex; align-items: center; gap: 1.5rem; flex: 1; min-width: 300px;">
+                    <div style="position: relative;">
+                        <div
+                            style="width: 100px; height: 100px; background: linear-gradient(45deg, var(--accent-blue), var(--accent-purple)); border-radius: 24px; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: white; box-shadow: 0 15px 35px rgba(0,0,0,0.3); border: 2px solid rgba(255,255,255,0.1);">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div
+                            style="position: absolute; bottom: 8px; right: 0; width: 22px; height: 22px; background: #22c55e; border: 4px solid #0f172a; border-radius: 50%; box-shadow: 0 0 10px #22c55e;">
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
+                            <span class="status-badge"
+                                style="background: rgba(0, 212, 255, 0.1); color: var(--accent-blue); font-size: 0.7rem; border: 1px solid rgba(0, 212, 255, 0.2);">CONSUMER
+                                PORTAL</span>
+                            <span style="color: var(--text-muted); font-size: 0.8rem;"><i class="fas fa-signal"></i>
+                                Online</span>
+                        </div>
+                        <h1
+                            style="margin: 0; font-size: 2.5rem; font-family: 'Outfit', sans-serif; font-weight: 800; letter-spacing: -0.5px;">
+                            Hello, <span class="text-gradient">{{ u.name }}</span>!
+                        </h1>
+                        <p
+                            style="margin: 5px 0 0; color: var(--text-secondary); font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-map-marker-alt text-blue"></i> {{ user_location }} District
+                            <span
+                                style="width: 4px; height: 4px; background: var(--text-muted); border-radius: 50%;"></span>
+                            <span style="font-size: 0.9rem;">Meter: #{{ u.phone|slice:"-4:" }}902</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Live Meter Stats Bar -->
+                <div
+                    style="display: flex; gap: 1.5rem; background: rgba(0,0,0,0.2); padding: 1.2rem 2rem; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(10px);">
+                    <div
+                        style="text-align: center; border-right: 1px solid rgba(255,255,255,0.05); padding-right: 1.5rem;">
+                        <span
+                            style="display: block; font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Active
+                            Load</span>
+                        <div style="font-family: 'Inter', sans-serif; font-weight: 700; color: var(--accent-green);">
+                            <span style="font-size: 1.4rem;">{{ latest_energy.power|default:"0.0" }}</span> <small
+                                style="font-size: 0.7rem; opacity: 0.8;">W</small>
+                        </div>
+                    </div>
+                    <div
+                        style="text-align: center; border-right: 1px solid rgba(255,255,255,0.05); padding-right: 1.5rem;">
+                        <span
+                            style="display: block; font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Current</span>
+                        <div style="font-family: 'Inter', sans-serif; font-weight: 700; color: var(--accent-blue);">
+                            <span style="font-size: 1.4rem;">{{ latest_energy.current|default:"0.0" }}</span> <small
+                                style="font-size: 0.7rem; opacity: 0.8;">A</small>
+                        </div>
+                    </div>
+                    <div style="text-align: center;">
+                        <span
+                            style="display: block; font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Voltage</span>
+                        <div style="font-family: 'Inter', sans-serif; font-weight: 700; color: #f59e0b;">
+                            <span style="font-size: 1.4rem;">238</span> <small
+                                style="font-size: 0.7rem; opacity: 0.8;">V</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Floating Data Update indicator -->
+            {% if latest_energy %}
+            <div
+                style="position: absolute; bottom: 15px; right: 25px; display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--text-muted);">
+                <span
+                    style="width: 8px; height: 8px; background: var(--accent-green); border-radius: 50%; display: inline-block; animation: blink 2s infinite;"></span>
+                Live Sync Enabled (Last updated {{ latest_energy.date|time:"H:i" }})
+            </div>
+            {% endif %}
+        </div>
+
+        <div
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem;">
+            <!-- Bill Quick Info -->
+            <div class="glass-card">
+                <div class="card-header-energy">
+                    <h4><i class="fas fa-file-invoice-dollar text-blue"></i> Billing Overview</h4>
+                    {% if pending_bills_count > 0 %}
+                    <span class="status-badge pending">{{ pending_bills_count }} Pending</span>
+                    {% else %}
+                    <span class="status-badge approved">Up to date</span>
+                    {% endif %}
+                </div>
+                <div class="card-body-energy">
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">You have {{ pending_bills_count }} unpaid
+                        utility bills. Pay now to avoid late fees.</p>
+                    <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                        <a href="{% url 'vbill' %}" class="btn-energy btn-energy-primary"
+                            style="flex: 1; justify-content: center;">
+                            Pay Bill
+                        </a>
+                        <a href="{% url 'vbill' %}" class="btn-energy btn-energy-outline"
+                            style="flex: 1; justify-content: center;">
+                            History
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+          
+
+            <style>
+                .hero-greeting-section {
+                    margin-bottom: 2.5rem;
+                    position: relative;
+                    overflow: hidden;
+                    border-radius: 30px;
+                }
+
+                .hero-glass-container {
+                    background: rgba(255, 255, 255, 0.03);
+                    backdrop-filter: blur(40px);
+                    -webkit-backdrop-filter: blur(40px);
+                    border: 1px solid rgba(255, 255, 255, 0.08);
+                    border-radius: 30px;
+                    padding: 3rem;
+                    position: relative;
+                    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+                }
+
+                .hero-content {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    position: relative;
+                    z-index: 2;
+                }
+
+                .user-profile-brief {
+                    display: flex;
+                    align-items: center;
+                    gap: 2rem;
+                }
+
+                .avatar-ring {
+                    position: relative;
+                    width: 100px;
+                    height: 100px;
+                }
+
+                .avatar-main {
+                    width: 100px;
+                    height: 100px;
+                    background: linear-gradient(135deg, #47e2f5, #fb4b9c);
+                    border-radius: 30px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 3rem;
+                    color: #fff;
+                    position: relative;
+                    z-index: 2;
+                }
+
+                .avatar-glow {
+                    position: absolute;
+                    top: -10px;
+                    left: -10px;
+                    right: -10px;
+                    bottom: -10px;
+                    background: linear-gradient(135deg, #47e2f5, #fb4b9c);
+                    border-radius: 35px;
+                    opacity: 0.3;
+                    filter: blur(20px);
+                    animation: pulseAvatar 3s infinite ease-in-out;
+                }
+
+                .status-dot-pulse {
+                    position: absolute;
+                    bottom: 5px;
+                    right: 5px;
+                    width: 15px;
+                    height: 15px;
+                    background: #00ff88;
+                    border-radius: 50%;
+                    border: 3px solid #11121d;
+                    box-shadow: 0 0 10px #00ff88;
+                }
+
+                .greeting-text h1 {
+                    font-size: 2.5rem;
+                    font-weight: 900;
+                    margin: 0.5rem 0;
+                    color: #fff;
+                    letter-spacing: -1px;
+                }
+
+                .status-badge {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 6px;
+                    background: rgba(0, 255, 136, 0.1);
+                    color: #00ff88;
+                    padding: 0.4rem 0.8rem;
+                    border-radius: 50px;
+                    font-size: 0.7rem;
+                    font-weight: 800;
+                    letter-spacing: 1px;
+                }
+
+                .user-meta {
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    color: #8892b0;
+                    font-size: 0.9rem;
+                    font-weight: 600;
+                }
+
+                .meta-divider {
+                    width: 1px;
+                    height: 15px;
+                    background: rgba(255, 255, 255, 0.1);
+                }
+
+                .telemetry-grid {
+                    display: grid;
+                    grid-template-columns: repeat(3, 140px);
+                    gap: 1.5rem;
+                }
+
+                .telemetry-card {
+                    background: rgba(255, 255, 255, 0.02);
+                    border: 1px solid rgba(255, 255, 255, 0.05);
+                    padding: 1.2rem;
+                    border-radius: 20px;
+                    transition: all 0.3s ease;
+                }
+
+                .tel-label {
+                    font-size: 0.65rem;
+                    font-weight: 800;
+                    color: #fb4b9c;
+                    letter-spacing: 1px;
+                    margin-bottom: 0.5rem;
+                }
+
+                .tel-value {
+                    font-size: 1.5rem;
+                    font-weight: 800;
+                    color: #fff;
+                }
+
+                .tel-value span {
+                    font-size: 0.8rem;
+                    color: #8892b0;
+                }
+
+                @keyframes pulseAvatar {
+
+                    0%,
+                    100% {
+                        transform: scale(1);
+                        opacity: 0.3;
+                    }
+
+                    50% {
+                        transform: scale(1.1);
+                        opacity: 0.5;
+                    }
+                }
+
+                @media (max-width: 1200px) {
+                    .hero-content {
+                        flex-direction: column;
+                        align-items: flex-start;
+                        gap: 3rem;
+                    }
+
+                    .telemetry-grid {
+                        width: 100%;
+                        grid-template-columns: repeat(3, 1fr);
+                    }
+                }
+            </style>
+
+            <!-- Energy Monitoring Card -->
+            <div class="glass-card animate-on-scroll">
+                <div class="card-header-energy">
+                    <h4><i class="fas fa-microchip text-gradient"></i> Energy Monitoring</h4>
+                    <span class="status-badge" style="background: rgba(0, 212, 255, 0.1); color: var(--accent-blue);">In
+                        Progress</span>
+                </div>
+                <div class="card-body-energy">
+                    <div style="text-align: center; margin-bottom: 1.5rem;">
+                        <div style="font-size: 2.5rem; font-weight: 800; color: var(--text-primary);">
+                            {{ latest_energy.energy|default:"0.0" }} <small
+                                style="font-size: 1rem; color: var(--text-muted);">kWh</small>
+                        </div>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Current Consumption</p>
+                    </div>
+                    <a href="{% url 'energy_monitoring' %}" class="btn-energy btn-energy-primary"
+                        style="width: 100%; justify-content: center;">
+                        <i class="fas fa-eye"></i> View Live Data
+                    </a>
+                </div>
+                <!-- Services Quick Links -->
+                <div class="glass-card">
+                    <div class="card-header-energy">
+                        <h4><i class="fas fa-bolt text-green"></i> Energy Services</h4>
+                    </div>
+                    <div class="card-body-energy">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
+                            <a href="{% url 'new_connection' %}" class="btn-energy btn-energy-sm btn-energy-outline"
+                                style="justify-content: center; padding: 1rem 0.5rem; flex-direction: column; gap: 0.5rem;">
+                                <i class="fas fa-plus"></i><span style="font-size: 0.75rem;">New Line</span>
+                            </a>
+                            <a href="{% url 'solar_connection' %}" class="btn-energy btn-energy-sm btn-energy-outline"
+                                style="justify-content: center; padding: 1rem 0.5rem; flex-direction: column; gap: 0.5rem;">
+                                <i class="fas fa-solar-panel"></i><span style="font-size: 0.75rem;">Solar</span>
+                            </a>
+                            <a href="{% url 'name_change' %}" class="btn-energy btn-energy-sm btn-energy-outline"
+                                style="justify-content: center; padding: 1rem 0.5rem; flex-direction: column; gap: 0.5rem;">
+                                <i class="fas fa-user-edit"></i><span style="font-size: 0.75rem;">Name Change</span>
+                            </a>
+                            <a href="{% url 'tariff_change' %}" class="btn-energy btn-energy-sm btn-energy-outline"
+                                style="justify-content: center; padding: 1rem 0.5rem; flex-direction: column; gap: 0.5rem;">
+                                <i class="fas fa-exchange-alt"></i><span style="font-size: 0.75rem;">Tariff Plan</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Requests -->
+                <div class="glass-card">
+                    <div class="card-header-energy">
+                        <h4><i class="fas fa-history text-accent"></i> Recent Activity</h4>
+                    </div>
+                    <div class="card-body-energy">
+                        <div class="activity-list">
+                            {% for conn in recent_conns %}
+                            <div
+                                style="padding: 1rem; background: rgba(255,255,255,0.03); border-radius: 12px; margin-bottom: 0.8rem; border: 1px solid var(--border-glass);">
+                                <div style="display: flex; justify-content: space-between; align-items: start;">
+                                    <div>
+                                        <div style="font-weight: 600; font-size: 0.9rem;">New Connection</div>
+                                        <div style="font-size: 0.75rem; color: var(--text-muted);">{{ conn.date }}</div>
+                                    </div>
+                                    <span
+                                        class="status-badge {% if conn.status == 'Approved' %}approved{% elif conn.status == 'Rejected' %}rejected{% else %}pending{% endif %}"
+                                        style="font-size: 0.65rem;">
+                                        {{ conn.status }}
+                                    </span>
+                                </div>
+                            </div>
+                            {% empty %}
+                            <p style="text-align: center; color: var(--text-muted); padding: 1rem;">No recent activity.
+                            </p>
+                            {% endfor %}
+                        </div>
+                        <a href="{% url 'track_requests' %}" class="btn-energy btn-energy-sm"
+                            style="width: 100%; justify-content: center; color: var(--accent-blue);">
+                            Track All Requests <i class="fas fa-chevron-right"
+                                style="font-size: 0.7rem; margin-left: 5px;"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}

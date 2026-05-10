@@ -1,0 +1,43 @@
+{% include "header.html" %}
+{% block content %}
+<div class="energy-section" style="padding-top: 120px;">
+    <div class="section-container">
+        <div class="section-header">
+            <span class="section-tag"><i class="fas fa-solar-panel"></i> Green Energy</span>
+            <h2>Solar System <span class="text-gradient">Activation</span></h2>
+            <p>Request integration of your solar panels with the smart grid</p>
+        </div>
+
+        <div class="glass-card" style="max-width: 600px; margin: 2rem auto;">
+            <div class="card-header-energy">
+                <h4><i class="fas fa-file-signature text-accent"></i> Solar Request Info</h4>
+            </div>
+            <div class="card-body-energy">
+                <form action="{% url 'solar_connection' %}" method="POST" class="form-energy">
+                    {% csrf_token %}
+                    <div class="form-group-energy">
+                        <label>Proposed Solar Capacity (kW)</label>
+                        <input type="number" name="capacity" class="form-input" placeholder="e.g. 5" required
+                            step="0.1">
+                    </div>
+
+                    <p
+                        style="padding: 1rem; background: rgba(0, 212, 255, 0.05); border-radius: 8px; font-size: 0.85rem; color: var(--text-secondary); border: 1px dashed var(--accent-blue);">
+                        <i class="fas fa-lightbulb text-blue"></i> Net Metering will be enabled upon approval, allowing
+                        you to export excess energy back to the grid.
+                    </p>
+
+                    <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                        <button type="submit" class="btn-energy btn-energy-primary">
+                            <i class="fas fa-leaf"></i> Request Integration
+                        </button>
+                        <a href="{% url 'consumer_dash' %}" class="btn-energy btn-energy-outline">
+                            Back
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

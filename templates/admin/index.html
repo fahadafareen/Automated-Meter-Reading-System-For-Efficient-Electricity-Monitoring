@@ -1,0 +1,117 @@
+{% load static %}
+{% block content %}
+
+{% include 'admin/menu.html' %}
+
+<!-- Admin Main Content -->
+<div class="admin-main">
+  <div class="admin-content">
+    <div class="admin-page-header">
+      <h2><span class="text-gradient">Dashboard</span></h2>
+      <p>Manage your energy meter system from one place</p>
+    </div>
+
+    <div class="admin-cards-grid">
+      <!-- Add Electricity -->
+      <a href="{% url 'addelect' %}" class="admin-action-card">
+        <div class="card-icon bg-blue-subtle">
+          <i class="fas fa-bolt text-blue"></i>
+        </div>
+        <div class="card-text">
+          <h4>Add Electricity</h4>
+          <p>Register new electricity meters</p>
+        </div>
+      </a>
+
+      <!-- Add Consumer -->
+      <a href="{% url 'addcon' %}" class="admin-action-card">
+        <div class="card-icon bg-green-subtle">
+          <i class="fas fa-user-plus text-green"></i>
+        </div>
+        <div class="card-text">
+          <h4>Add Consumer</h4>
+          <p>Register new consumers to meters</p>
+        </div>
+      </a>
+
+      <!-- Analyze -->
+      <a href="{% url 'addanal' %}" class="admin-action-card">
+        <div class="card-icon bg-purple-subtle">
+          <i class="fas fa-chart-line" style="color: #7c3aed;"></i>
+        </div>
+        <div class="card-text">
+          <h4>Analyze Readings</h4>
+          <p>Record meter readings & analysis</p>
+        </div>
+      </a>
+
+      <!-- Bill Generation -->
+      <a href="{% url 'addbill' %}" class="admin-action-card">
+        <div class="card-icon bg-orange-subtle">
+          <i class="fas fa-file-invoice-dollar text-orange"></i>
+        </div>
+        <div class="card-text">
+          <h4>Bill Generation</h4>
+          <p>Generate electricity bills</p>
+        </div>
+      </a>
+
+      <!-- View Payment -->
+      <a href="{% url 'viewconsumerpayment' %}" class="admin-action-card">
+        <div class="card-icon bg-green-subtle">
+          <i class="fas fa-credit-card text-green"></i>
+        </div>
+        <div class="card-text">
+          <h4>View Payments</h4>
+          <p>Review consumer payment records</p>
+        </div>
+      </a>
+
+      <!-- Add News -->
+      <a href="{% url 'addnews' %}" class="admin-action-card">
+        <div class="card-icon bg-pink-subtle">
+          <i class="fas fa-newspaper" style="color: #ff2d78;"></i>
+        </div>
+        <div class="card-text">
+          <h4>Add News</h4>
+          <p>Post news and announcements</p>
+        </div>
+      </a>
+
+      <!-- View Bill -->
+      <a href="{% url 'viewbill' %}" class="admin-action-card">
+        <div class="card-icon bg-blue-subtle">
+          <i class="fas fa-receipt text-blue"></i>
+        </div>
+        <div class="card-text">
+          <h4>View Bills</h4>
+          <p>View all generated bills</p>
+        </div>
+      </a>
+
+      <!-- View Consumer -->
+      <a href="{% url 'viewcon' %}" class="admin-action-card">
+        <div class="card-icon bg-purple-subtle">
+          <i class="fas fa-users" style="color: #7c3aed;"></i>
+        </div>
+        <div class="card-text">
+          <h4>View Consumers</h4>
+          <p>Manage registered consumers</p>
+        </div>
+      </a>
+
+      <!-- View Electricity -->
+      <a href="{% url 'viewel' %}" class="admin-action-card">
+        <div class="card-icon bg-orange-subtle">
+          <i class="fas fa-plug text-orange"></i>
+        </div>
+        <div class="card-text">
+          <h4>View Electricity</h4>
+          <p>View registered meters & status</p>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  {% include 'admin/footer.html' %}
+  {% endblock %}

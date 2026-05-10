@@ -1,0 +1,62 @@
+{% include 'header.html' %}
+{% block content %}
+<div class="energy-section" style="padding-top: 120px;">
+    <div class="section-container">
+        <div class="section-header">
+            <span class="section-tag"><i class="fas fa-file-signature"></i> Reporting</span>
+            <h2>Maintenance <span class="text-gradient">Report</span></h2>
+            <p>Submit your daily maintenance and operational findings</p>
+        </div>
+
+        <div class="glass-card" style="max-width: 600px; margin: 2rem auto;">
+            <div class="card-header-energy">
+                <h4><i class="fas fa-edit text-accent"></i> New Daily Report</h4>
+            </div>
+            <div class="card-body-energy">
+                {% if status == 'success' %}
+                <div
+                    style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); color: #22c55e; padding: 1rem; border-radius: 8px; text-align: center; margin-bottom: 2rem;">
+                    <i class="fas fa-check-circle" style="font-size: 2rem; display: block; margin-bottom: 0.5rem;"></i>
+                    Report submitted successfully!
+                </div>
+                <a href="{% url 'worker_dash' %}" class="btn-energy btn-energy-outline"
+                    style="width: 100%; justify-content: center;">Return to Dashboard</a>
+                {% elif status == 'failed' %}
+                <div
+                    style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #ef4444; padding: 1rem; border-radius: 8px; text-align: center; margin-bottom: 1rem;">
+                    <i class="fas fa-times-circle"
+                        style="font-size: 1.5rem; display: inline-block; margin-right: 0.5rem;"></i>
+                    {{ error }}
+                </div>
+                <form action="{% url 'submit_report' %}" method="POST" class="form-energy">
+                    {% csrf_token %}
+
+                    <div class="form-group-energy">
+                        <label>Select Assigned Zone</label>
+                        <select name="zoneid" class="form-input" required>
+                            <option value="" disabled selected>Choose a zone...</option>
+                            {% for z in zones %}
+                            <option value="{{ z.id }}">{{ z.category }} - {{ z.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group-energy">
+                        <label>Maintenance Details</label>
+                        <textarea name="content" class="form-input"
+                            placeholder="Describe work performed, issues found, or observations..." required></textarea>
+                    </div>
+
+                    <div style="margin-top: 2rem;">
+                        <button type="submit" class="btn-energy btn-energy-primary"
+                            style="width: 100%; justify-content: center;">
+                            <i class="fas fa-paper-plane"></i> Submit Report
+                        </button>
+                    </div>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

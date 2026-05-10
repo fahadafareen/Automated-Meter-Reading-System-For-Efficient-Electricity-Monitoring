@@ -1,0 +1,76 @@
+{% load static %}
+{% block content %}
+{% include 'admin/menu.html' %}
+
+<div class="admin-main">
+    <div class="admin-content">
+        <div class="admin-page-header">
+            <h2><i class="fas fa-shipping-fast text-blue"></i> <span class="text-gradient">Employee Dispatch</span></h2>
+            <p>Assign employees to specific zones for maintenance or outage resolution</p>
+        </div>
+
+        {% if status == 'failed' %}
+        <div
+            style="background: rgba(255, 45, 120, 0.1); border: 1px solid #ff4444; color: #ff4444; padding: 1rem; border-radius: 12px; margin-bottom: 2rem; display: flex; align-items: center; gap: 10px; max-width: 600px;">
+            <i class="fas fa-exclamation-triangle"></i> {{ error }}
+        </div>
+        {% endif %}
+
+        <div class="glass-card" style="max-width: 600px; margin-top: 2rem;">
+            <div class="card-header-energy">
+                <h4><i class="fas fa-clipboard-list text-accent"></i> Dispatch Assignment</h4>
+            </div>
+            <div class="card-body-energy">
+                <form action="{% url 'dispatch_worker' %}" method="POST" class="form-energy">
+                    {% csrf_token %}
+
+                    <div class="form-group-energy">
+                        <label>Select Employee</label>
+                        <select name="workerid" class="form-input" required>
+                            <option value="" disabled selected>Choose a worker...</option>
+                            {% for w in workers %}
+                            <option value="{{ w.id }}">{{ w.name }} ({{ w.role }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group-energy">
+                        <label>Select Target Zone</label>
+                        <select name="zoneid" class="form-input" required>
+                            <option value="" disabled selected>Choose a zone...</option>
+                            {% for z in zones %}
+                            <option value="{{ z.id }}">{{ z.category }} - {{ z.name }} (Status: {{ z.status }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group-energy">
+                        <label>Dispatch Date</label>
+                        <input type="date" name="date" class="form-input" value="{{ current_date }}"
+                            min="{{ current_date }}" max="{{ current_date }}"
+                            onchange="if(this.value != '{{ current_date }}') { alert('Invalid date Selected! Only today\'s date is allowed.'); this.value='{{ current_date }}'; }"
+                            required>
+                    </div>
+
+                    <div class="form-group-energy">
+                        <label>Task Details / Instructions</label>
+                        <textarea name="details" class="form-input"
+                            placeholder="Enter specific instructions for the technician..."></textarea>
+                    </div>
+
+                    <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                        <button type="submit" class="btn-energy btn-energy-primary">
+                            <i class="fas fa-paper-plane"></i> Dispatch Now
+                        </button>
+                        <a href="{% url 'view_dispatch' %}" class="btn-energy btn-energy-outline">
+                            View History
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% include 'admin/footer.html' %}
+</div>
+
+{% endblock %}

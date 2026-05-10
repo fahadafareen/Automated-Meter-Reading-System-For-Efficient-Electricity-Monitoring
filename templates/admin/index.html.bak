@@ -1,0 +1,125 @@
+{% load static %}
+{% block content %}
+
+{% include 'admin/menu.html' %}
+
+         <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="row purchace-popup">
+              <div class="col-12 stretch-card grid-margin">
+               
+              </div>
+            </div>
+            <!-- Quick Action Toolbar Ends-->
+           <div class="row">
+              <div class="col-md-12 grid-margin">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="d-sm-flex align-items-baseline report-summary-header">
+                          <h5 class="font-weight-semibold"></h5>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row report-inner-cards-wrapper">
+                      <div class=" col-md -6 col-xl report-inner-card">
+                        <div class="inner-card-text">
+                          <h4><a class="navbar-brand" href="{% url 'addelect' %}" style="color: black;">ADD Electricty</a></h4>
+                        </div>
+                        <div class="inner-card-icon" style="background-color:#008ECC">
+                          <i><img src="{% static 'admin/images/icon1.jpg' %}" style="width:50px; height: 50px;"></i>
+                        </div>
+                      </div>
+                      <div class="col-md-6 col-xl report-inner-card">
+                        <div class="inner-card-text">
+                          <h4><a class="navbar-brand" href="{%url 'addcon'%}" style="color: black;"> Add Consumers </a></h4>
+                        </div>
+                         <div class="inner-card-icon" style="background-color:#00a9d4">
+                         <i><img src="{% static 'admin/images/icon2.jpg' %}" style="width:50px; height: 50px;"></i>
+                        </div>
+                      </div>
+                </div>
+					         <div class="row report-inner-cards-wrapper">
+                      <div class=" col-md -6 col-xl report-inner-card">
+                        <div class="inner-card-text">
+                          <h4><a class="navbar-brand" href="{% url 'addanal'%}" style="color: black;">Analysis</a></h4>
+                        </div>
+                        <div class="inner-card-icon" style="background-color:#008ECC">
+                          <i><img src="{% static 'admin/images/icon1.jpg' %}" style="width:50px; height: 50px;"></i>
+                        </div>
+                      </div>
+                      <div class="col-md-6 col-xl report-inner-card">
+                        <div class="inner-card-text">
+                          <h4><a class="navbar-brand" href="{% url 'addbill' %}" style="color: black;">Bill Generation </a></h4>
+                        </div>
+                         <div class="inner-card-icon" style="background-color:#00a9d4">
+                         <i><img src="{% static 'admin/images/icon2.jpg' %}" style="width:50px; height: 50px;"></i>
+                        </div>
+                      </div>
+					  
+                </div>
+				 <div class="row report-inner-cards-wrapper">
+                      <div class=" col-md -6 col-xl report-inner-card">
+                        <div class="inner-card-text">
+                          <h4><a class="navbar-brand" href="{% url 'addnews' %}" style="color: black;">Add News</a></h4>
+                        </div>
+                        <div class="inner-card-icon" style="background-color:#008ECC">
+                          <i><img src="{% static 'admin/images/icon1.jpg' %}" style="width:50px; height: 50px;"></i>
+                        </div>
+                      </div>
+                      <div class="col-md-6 col-xl report-inner-card">
+                        <div class="inner-card-text">
+                          <h4><a class="navbar-brand" href="{% url 'viewbill' %}" style="color: black;">VIEW BILL</a></h4>
+                        </div>
+                         <div class="inner-card-icon" style="background-color:#00a9d4">
+                         <i><img src="{% static 'admin/images/icon2.jpg' %}" style="width:50px; height: 50px;"></i>
+                        </div>
+                      </div>
+					  
+                </div>
+				
+				<div class="row report-inner-cards-wrapper">
+                      <div class=" col-md -6 col-xl report-inner-card">
+                        <div class="inner-card-text">
+                          <h4><a class="navbar-brand" href="{% url 'viewcon' %}" style="color: black;">VIEW CONSUMER</a></h4>
+                        </div>
+                        <div class="inner-card-icon" style="background-color:#008ECC">
+                          <i><img src="{% static 'admin/images/icon1.jpg' %}" style="width:50px; height: 50px;"></i>
+                        </div>
+                      </div>
+                      <div class="col-md-6 col-xl report-inner-card">
+                        <div class="inner-card-text">
+                          <h4><a class="navbar-brand" href="{% url 'viewelect' %}" style="color: black;">VIEW ELECTRICITY</a></h4>
+                        </div>
+                         <div class="inner-card-icon" style="background-color:#00a9d4">
+                         <i><img src="{% static 'admin/images/icon2.jpg' %}" style="width:50px; height: 50px;"></i>
+                        </div>
+                      </div>
+					  
+                </div>
+					  
+					  
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+   
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:partials/_footer.html -->
+          
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    {% include 'admin/footer.html' %}
+    {% endblock %}

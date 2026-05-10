@@ -1,0 +1,46 @@
+{% block content %}
+<html>
+
+<head>
+    <title>
+    </title>
+</head>
+
+<body>
+    <form method="POST" enctype="multipart/form-data" action="{% url 'newss' %}">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td>
+                    TITLE:</td>
+                <td><input type="text" name="title"><br><br>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    DESCRIPTION:</td>
+                <td><input type="text" name="description"><br><br>
+                </td>
+            </tr>
+            <tr>
+
+            <tr>
+                <td>
+                    POST DATE:</td>
+                <td><input type="date" name="postdate"><br><br>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <input type="submit" name="submit">
+                </td>
+            </tr>
+        </table>
+    </form>
+</body>
+
+</html>
+
+
+{% endblock %}

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #00d4ff 0%, #090979 100%);
+            padding: 40px 20px;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .greeting {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #090979;
+        }
+
+        .success-accent {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .details-card {
+            background-color: #f8fbff;
+            border-left: 4px solid #00d4ff;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #e1e8ed;
+            padding-bottom: 8px;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .detail-value {
+            color: #333;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+        }
+
+        .total-row {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px dashed #00d4ff;
+            font-size: 20px;
+        }
+
+        .total-value {
+            color: #090979;
+            font-size: 24px;
+        }
+
+        .footer {
+            background-color: #f1f3f5;
+            padding: 20px;
+            text-align: center;
+            font-size: 13px;
+            color: #777;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #00d4ff 0%, #090979 100%);
+            color: #ffffff !important;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="icon">✅</div>
+            <h1>Payment Successful</h1>
+        </div>
+        <div class="content">
+            <p class="greeting">Hello {{ name }},</p>
+            <p>Great news! Your electricity bill payment has been successfully processed. Thank you for your timely
+                payment.</p>
+
+            <div class="details-card">
+                <div class="detail-row">
+                    <span class="detail-label">Transaction ID</span>
+                    <span class="detail-value">#PAY{{ payment_id }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Meter Number</span>
+                    <span class="detail-value">{{ meter_number }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Payment Method</span>
+                    <span class="detail-value">{{ payment_type }} Card</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Date</span>
+                    <span class="detail-value">{{ date }}</span>
+                </div>
+                <div class="detail-row total-row">
+                    <span class="detail-label">Amount Paid</span>
+                    <span class="total-value">₹{{ amount }}</span>
+                </div>
+            </div>
+
+            <p>You can view and download your official receipt by logging into your account.</p>
+
+            <div style="text-align: center;">
+                <a href="{{ dash_url }}" class="btn">View My Dashboard</a>
+            </div>
+        </div>
+        <div class="footer">
+            <p>&copy; 2026 Energy Meter Portal. All rights reserved.</p>
+            <p>This is an automated message, please do not reply to this email.</p>
+        </div>
+    </div>
+</body>
+
+</html>

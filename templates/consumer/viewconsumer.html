@@ -1,0 +1,60 @@
+{% load static %}
+{% block content %}
+{% include 'header.html' %}
+
+<div class="energy-page">
+  <div class="page-container">
+    <div class="page-header-banner animate-on-scroll">
+      <h2><i class="fas fa-eye text-gradient"></i> My Complaints</h2>
+      <p>Track the status of your filed complaints</p>
+    </div>
+
+    <div class="glass-card animate-on-scroll">
+      <div class="card-header-energy">
+        <h4><i class="fas fa-clipboard-list text-blue"></i> Complaint History</h4>
+        <div class="header-icon bg-orange-subtle"><i class="fas fa-exclamation-triangle text-orange"></i></div>
+      </div>
+      <div class="card-body-energy" style="padding: 0;">
+        <div style="overflow-x: auto;">
+          <table class="table-energy">
+            <thead>
+              <tr>
+                <th>#ID</th>
+                <th>Complaint</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for i in result %}
+              <tr>
+                <td><strong style="color: var(--text-primary);">#{{i.id}}</strong></td>
+                <td>{{i.complaintname}}</td>
+                <td style="max-width: 250px;">{{i.description}}</td>
+                <td>{{i.date}}</td>
+                <td>
+                  <span
+                    class="status-badge {% if i.status == 'pending' %}pending{% elif i.status == 'approved' %}approved{% else %}active{% endif %}">
+                    {{i.status}}
+                  </span>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="5" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                  <i class="fas fa-inbox" style="font-size: 2rem; display: block; margin-bottom: 0.8rem;"></i>
+                  No complaints filed yet.
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include 'footer.html' %}
+{% endblock %}

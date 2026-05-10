@@ -1,0 +1,68 @@
+{% load static %}
+{% block content %}
+
+{% include 'admin/menu.html' %}
+
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="row purchace-popup">
+              <div class="col-12 stretch-card grid-margin">
+               
+              </div>
+            </div>
+           <center> <div class="col-md-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">ADD New </h4>
+                    <form method="POST"  action="mtr">
+                        {% csrf_token %}
+{{form.as_p}}
+
+                      <div class="form-group row">
+                      </div>
+
+                     
+                     <div class="form-group row">
+                        <label for="exampleInputEmail2" class="col-sm-3 col-form-label">Number</label>
+                        <div class="col-sm-9">
+                       <input type="text" name="number" class="form-control" >      
+                  </div>
+                      </div>
+                     
+					 <div class="form-group row">
+                        <div class="col-sm-9">
+                        
+						<input type="hidden" name="name" value="pending" class="form-control"></div>
+                      </div>
+					 
+					 
+					
+                      
+					  
+					  
+
+                      <button type="submit" name="submit" class="btn btn-primary mr-2" >Submit</button>
+
+                    </form>
+                  </div>
+                </div>
+              </div></center>
+     
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:partials/_footer.html -->
+          
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+ {% include 'admin/footer.html' %}
+
+    {% endblock %}

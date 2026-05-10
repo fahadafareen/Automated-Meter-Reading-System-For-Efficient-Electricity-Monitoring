@@ -1,0 +1,130 @@
+{% load static %}
+{% block content %}
+{% include 'header.html' %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="energy-section" style="padding-top: 120px;">
+    <div class="section-container">
+        <div class="section-header">
+           <h2><i class="fas fa-file-invoice-dollar text-gradient"></i> My Bills</h2>
+        <p>View and pay your approved electricity bills</p>
+      </div>
+        </div>
+
+        <div class="card-header-energy" style="flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <h4><i class="fas fa-list text-blue"></i> Approved Bills</h4>
+        </div>
+
+        <form method="GET" action="{% url 'vbill' %}" style="display: flex; align-items: center; gap: 10px;">
+          <label
+            style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">Filter
+            by Year:</label>
+          <select name="year" class="form-input"
+            style="padding: 0.4rem 2rem 0.4rem 1rem; font-size: 0.85rem; width: auto; min-width: 140px;"
+            onchange="this.form.submit()">
+            <option value="">Show All Years</option>
+            {% for year in years %}
+            <option value="{{ year }}" {% if year == selected_year %}selected{% endif %}>{{ year }}</option>
+            {% endfor %}
+          </select>
+          {% if selected_year %}
+          <a href="{% url 'vbill' %}" style="color: #ef4444; font-size: 0.8rem; text-decoration: none;"><i
+              class="fas fa-times"></i> Clear</a>
+          {% endif %}
+        </form>
+      </div>
+
+        <div class="glass-card animate-on-scroll" style="margin-top: 2rem;">
+            <div class="card-header-energy">
+                <h4><i class="fas fa-history text-blue"></i> Completed Payments</h4>
+            </div>
+            <div class="card-body-energy" style="padding: 0;">
+                <div style="overflow-x: auto;">
+                            <table class="table-energy">
+            <thead>
+              <tr>
+                <th>Meter Name</th>
+                <th>Date</th>
+                <th>Amount (₹)</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for i in result %}
+              <tr>
+                <td><strong style="color: var(--text-primary);">{{i.cid}}</strong></td>
+                <td>{{i.date}}</td>
+                <td><span style="color: var(--accent-green); font-weight: 600;">₹{{i.bill_amount}}</span></td>
+                <td>{{i.due_date}}</td>
+                <td>
+                  <span
+                    class="status-badge {% if i.status == 'pending' or i.status == 'Pending' %}pending{% elif i.status == 'paid' or i.status == 'Paid' %}paid{% elif i.status == 'Accept' or i.status == 'accept' %}active{% elif i.status == 'Reject' or i.status == 'reject' %}inactive{% endif %}">
+                    {{i.status}}
+                  </span>
+                </td>
+                <td>
+                  {% if i.status == 'Accept' or i.status == 'accept' or i.status == 'pending' %}
+                  <a href="{% url 'paybill' id=i.id %}" class="btn-energy btn-energy-primary btn-energy-sm">
+                    <i class="fas fa-credit-card"></i> Pay
+                  </a>
+                  {% else %}
+                  <span class="text-muted" style="font-size: 0.9em; color: var(--text-muted);">-</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="6" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                  <i class="fas fa-check-circle"
+                    style="font-size: 2rem; display: block; margin-bottom: 0.8rem; color: var(--accent-green);"></i>
+                  No approved bills. You're all caught up! 🎉
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% include 'footer.html' %}
+{% endblock %}

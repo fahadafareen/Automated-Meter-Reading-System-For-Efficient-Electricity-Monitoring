@@ -1,0 +1,51 @@
+{% load static %}
+{% block content %}
+
+{% include 'admin/menu.html' %}
+
+<div class="admin-main">
+  <div class="admin-content">
+    <div class="admin-page-header">
+      <h2><i class="fas fa-user-plus text-green"></i> <span class="text-gradient">Add Consumer</span></h2>
+      <p>Assign a consumer to a meter</p>
+    </div>
+
+    <div class="glass-card" style="max-width: 600px;">
+      <div class="card-header-energy">
+        <h4><i class="fas fa-user-check text-green"></i> Consumer Assignment</h4>
+        <div class="header-icon bg-green-subtle"><i class="fas fa-users text-green"></i></div>
+      </div>
+      <div class="card-body-energy">
+        <form action="{% url 'conss' %}" method="post" class="form-energy">
+          {% csrf_token %}
+
+          <div class="form-group-energy">
+            <label><i class="fas fa-user"></i> Consumer Name</label>
+            <select name="name" class="form-input" required>
+              <option value="">Select consumer</option>
+              {% for i in result %}
+              <option value="{{i.name}}">{{i.name}}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="form-group-energy">
+            <label><i class="fas fa-hashtag"></i> Meter Number</label>
+            <select name="meternumber" class="form-input" required>
+              <option value="">Select meter</option>
+              {% for i in result1 %}
+              <option value="{{i.meternumber}}">{{i.meternumber}}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <button type="submit" class="btn-energy btn-energy-green" style="width: 100%; justify-content: center;">
+            <i class="fas fa-check-circle"></i> Assign Consumer
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  {% include 'admin/footer.html' %}
+  {% endblock %}

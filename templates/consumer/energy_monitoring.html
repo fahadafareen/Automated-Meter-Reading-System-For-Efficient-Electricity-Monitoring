@@ -1,0 +1,193 @@
+{% load static %}
+{% block content %}
+{% include 'header.html' %}
+
+<div class="energy-section" style="padding-top: 120px;">
+    <div class="section-container">
+        <div class="page-header-banner animate-on-scroll"
+            style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h2><i class="fas fa-microchip text-gradient"></i> Energy Monitoring</h2>
+                <p>Real-time electricity consumption data from your smart meter</p>
+            </div>
+            <a href="{% url 'consumer_dash' %}" class="btn-energy btn-energy-outline btn-energy-sm">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+
+        <!-- Live Status Cards -->
+        <div class="admin-cards-grid mt-3 animate-on-scroll">
+            <div class="glass-card"
+                style="padding: 1.5rem; text-align: center; border-left: 4px solid var(--accent-blue);">
+                <i class="fas fa-bolt" style="font-size: 2rem; color: var(--accent-blue); margin-bottom: 1rem;"></i>
+                <h3 id="current-val" style="font-size: 2rem; font-weight: 800;">{{ latest.current|default:"0.0" }}
+                    <small style="font-size: 1rem; color: var(--text-muted);">A</small>
+                </h3>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">Current Load</p>
+            </div>
+
+            <div class="glass-card"
+                style="padding: 1.5rem; text-align: center; border-left: 4px solid var(--accent-orange);">
+                <i class="fas fa-plug" style="font-size: 2rem; color: var(--accent-orange); margin-bottom: 1rem;"></i>
+                <h3 id="power-val" style="font-size: 2rem; font-weight: 800;">{{ latest.power|default:"0.0" }} <small
+                        style="font-size: 1rem; color: var(--text-muted);">W</small></h3>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">Active Power</p>
+            </div>
+
+            <div class="glass-card"
+                style="padding: 1.5rem; text-align: center; border-left: 4px solid var(--accent-green);">
+                <i class="fas fa-battery-half"
+                    style="font-size: 2rem; color: var(--accent-green); margin-bottom: 1rem;"></i>
+                <h3 id="energy-val" style="font-size: 2rem; font-weight: 800;">{{ latest.energy|default:"0.0" }} <small
+                        style="font-size: 1rem; color: var(--text-muted);">kWh</small></h3>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">Total Energy Used</p>
+            </div>
+        </div>
+
+        <!-- Power Usage Chart -->
+        <div class="glass-card mt-3 animate-on-scroll">
+            <div class="card-header-energy" style="border: none; padding-bottom: 0;">
+                <h4><i class="fas fa-chart-line text-blue"></i> Power Usage History</h4>
+                <div class="header-icon bg-blue-subtle"><i class="fas fa-wave-square text-blue"></i></div>
+            </div>
+            <div class="card-body-energy" style="height: 300px; position: relative;">
+                <canvas id="usageChart"></canvas>
+            </div>
+        </div>
+
+        <!-- History Table -->
+        <div class="glass-card mt-3 animate-on-scroll">
+            <div class="card-header-energy">
+                <h4><i class="fas fa-history text-blue"></i> Consumption Logs</h4>
+                <div class="header-icon bg-blue-subtle"><i class="fas fa-list text-blue"></i></div>
+            </div>
+            <div class="card-body-energy" style="padding: 0;">
+                <div style="overflow-x: auto;">
+                    <table class="table-energy">
+                        <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>current</th>
+                                <th>power</th>
+                                <th>energy</th>
+                                <th>time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logs-body">
+                            {% for d in monitoring_data %}
+                            <tr>
+                                <td>{{ d.id }}</td>
+                                <td>{{ d.current }}</td>
+                                <td>{{ d.power }}</td>
+                                <td>{{ d.energy }}</td>
+                                <td>{{ d.date|date:"Y-m-d H:i:s" }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 3rem;">
+                                    <i class="fas fa-satellite-dish"
+                                        style="font-size: 2rem; color: var(--text-muted); display: block; margin-bottom: 1rem;"></i>
+                                    <p>No monitoring data received yet. Connect your smart meter to start tracking.</p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+    let usageChart;
+
+    function initChart() {
+        const ctx = document.getElementById('usageChart').getContext('2d');
+        usageChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Active Power (W)',
+                    data: [],
+                    borderColor: '#00d4ff',
+                    backgroundColor: 'rgba(0, 212, 255, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#00d4ff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                        ticks: { color: 'rgba(255, 255, 255, 0.6)' }
+                    },
+                    y: {
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                        ticks: { color: 'rgba(255, 255, 255, 0.6)' },
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    function updateData() {
+        fetch('/get_energy_data/')
+            .then(response => response.json())
+            .then(data => {
+                if (data.latest) {
+                    document.getElementById('current-val').innerHTML = `${data.latest.current} <small style="font-size: 1rem; color: var(--text-muted);">A</small>`;
+                    document.getElementById('power-val').innerHTML = `${data.latest.power} <small style="font-size: 1rem; color: var(--text-muted);">W</small>`;
+                    document.getElementById('energy-val').innerHTML = `${data.latest.energy} <small style="font-size: 1rem; color: var(--text-muted);">kWh</small>`;
+                }
+
+                const tbody = document.getElementById('logs-body');
+                if (data.monitoring_data && data.monitoring_data.length > 0) {
+                    let html = '';
+                    data.monitoring_data.forEach(d => {
+                        html += `
+                            <tr>
+                                <td>${d.id}</td>
+                                <td>${d.current}</td>
+                                <td>${d.power}</td>
+                                <td>${d.energy}</td>
+                                <td>${d.time}</td>
+                            </tr>
+                        `;
+                    });
+                    tbody.innerHTML = html;
+                }
+
+                if (data.chart_labels && data.chart_values) {
+                    if (!usageChart) {
+                        initChart();
+                    }
+                    usageChart.data.labels = data.chart_labels;
+                    usageChart.data.datasets[0].data = data.chart_values;
+                    usageChart.update('none');
+                }
+            })
+            .catch(error => console.error('Error fetching energy data:', error));
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        initChart();
+        updateData();
+    });
+
+    setInterval(updateData, 5000);
+</script>
+
+{% endblock %}

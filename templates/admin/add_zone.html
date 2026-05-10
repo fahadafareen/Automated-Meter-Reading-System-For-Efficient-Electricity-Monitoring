@@ -1,0 +1,61 @@
+{% load static %}
+{% block content %}
+{% include 'admin/menu.html' %}
+
+<div class="admin-main">
+    <div class="admin-content">
+        <div class="admin-page-header">
+            <h2><i class="fas fa-plus-circle text-blue"></i> <span class="text-gradient">Add New Zone</span></h2>
+            <p>Define a new monitoring zone and its current operational status</p>
+        </div>
+
+        <div class="glass-card" style="max-width: 600px; margin-top: 2rem;">
+            <div class="card-header-energy">
+                <h4><i class="fas fa-edit text-accent"></i> Zone Details</h4>
+            </div>
+            <div class="card-body-energy">
+                <form action="{% url 'add_zone' %}" method="POST" class="form-energy">
+                    {% csrf_token %}
+                    <div class="form-group-energy">
+                        <label>Zone Name</label>
+                        <input type="text" name="name" class="form-input" placeholder="e.g. North Sector A" required>
+                    </div>
+
+                    <div class="form-group-energy">
+                        <label>Zone Category</label>
+                        <select name="category" class="form-input" required>
+                            <option value="" disabled selected>Select Category</option>
+                            <option value="Zone 1">Zone 1</option>
+                            <option value="Zone 2">Zone 2</option>
+                            <option value="Zone 3">Zone 3</option>
+                            <option value="Residential">Residential</option>
+                            <option value="Commercial">Commercial</option>
+                            <option value="Industrial">Industrial</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group-energy">
+                        <label>Initial Status</label>
+                        <select name="status" class="form-input" required>
+                            <option value="Normal">Normal (Green)</option>
+                            <option value="Maintenance">Maintenance (Yellow)</option>
+                            <option value="Power Outage">Power Outage (Red)</option>
+                        </select>
+                    </div>
+
+                    <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                        <button type="submit" class="btn-energy btn-energy-primary">
+                            <i class="fas fa-save"></i> Save Zone
+                        </button>
+                        <a href="{% url 'zone_status' %}" class="btn-energy btn-energy-outline">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% include 'admin/footer.html' %}
+</div>
+
+{% endblock %}

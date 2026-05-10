@@ -1,0 +1,54 @@
+
+
+{% load static %}
+{% block content %}
+{% include 'header.html' %}  
+
+    <!-- END slider -->
+
+    
+<br><br>
+
+
+    <div class="site-section">
+      <div class="container">
+        <div class="row">
+         
+          <div class="col-md-5">
+          
+            <h3 class="heading-92913 text-black">view complaints</h3>
+<table class="table" border="1">
+                      <thead>
+                        <tr>
+                          <th><B> id </B></th>
+                          <th><B> title </B></th>
+                          <th> <B>description: </B></th>
+                          <th><B>postdate</B> </th>
+                          
+                            
+
+                        </tr>
+                      </thead>
+                      <tbody>
+{% for i in result %}
+                   <tr>
+				   <td>{{i.id}}</td>
+				   <td>{{i.title}}</td>
+				    <td>{{i.description}}</td>
+				   <td>{{i.post_date}}</td>
+				   
+
+				   
+				   </tr>
+				   {% endfor %}
+                      </tbody>
+                    </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+
+   {% include 'footer.html' %}
+   {% endblock %}

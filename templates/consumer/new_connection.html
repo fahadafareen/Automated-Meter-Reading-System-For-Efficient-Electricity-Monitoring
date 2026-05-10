@@ -1,0 +1,61 @@
+{% include "header.html" %}
+{% block content %}
+<div class="energy-section" style="padding-top: 120px;">
+    <div class="section-container">
+        <div class="section-header">
+            <span class="section-tag"><i class="fas fa-plus-circle"></i> Connection Service</span>
+            <h2>Apply for <span class="text-gradient">New Connection</span></h2>
+            <p>Request a new electricity line for your premises</p>
+        </div>
+
+        <div class="glass-card animate-on-scroll" style="max-width: 600px; margin: 2rem auto;">
+            <div class="card-header-energy">
+                <h4><i class="fas fa-edit text-accent"></i> Application Form</h4>
+            </div>
+            <div class="card-body-energy">
+                <form action="{% url 'new_connection' %}" method="POST" class="form-energy">
+                    {% csrf_token %}
+                    <div class="form-group-energy">
+                        <label>Installation Address</label>
+                        <textarea name="address" class="form-input" rows="3"
+                            placeholder="Enter complete address for new installation" required></textarea>
+                    </div>
+
+                    <div class="form-group-energy">
+                        <label>Connection Type</label>
+                        <select name="connection_type" class="form-input" required>
+                            <option value="" disabled selected>Select Type</option>
+                            <option value="Residential">Residential (Domestic)</option>
+                            <option value="Commercial">Commercial (Business)</option>
+                            <option value="Industrial">Industrial (Large Scale)</option>
+                            <option value="Agricultural">Agricultural (Farming)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group-energy">
+                        <label>Phase Type</label>
+                        <select name="phase" class="form-input" required>
+                            <option value="" disabled selected>Select Phase</option>
+                            <option value="1-Phase">1-Phase (Single Phase)</option>
+                            <option value="3-Phase">3-Phase (Three Phase)</option>
+                        </select>
+                    </div>
+
+                    <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                        <button type="submit" class="btn-energy btn-energy-primary">
+                            <i class="fas fa-paper-plane"></i> Submit Application
+                        </button>
+                        <a href="{% url 'consumer_dash' %}" class="btn-energy btn-energy-outline">
+                            Cancel
+                        </a>
+                    </div>
+                    <p style="margin-top: 1.5rem; font-size: 0.8rem; color: var(--text-muted); text-align: center;">
+                        <i class="fas fa-info-circle"></i> Once submitted, our team will visit the site for inspection
+                        within 3-5 working days.
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

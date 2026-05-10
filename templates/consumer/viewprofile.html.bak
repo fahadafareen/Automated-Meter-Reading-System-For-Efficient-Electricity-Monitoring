@@ -1,0 +1,59 @@
+
+
+{% load static %}
+{% block content %}
+{% include 'header.html' %}  
+
+    <!-- END slider -->
+
+    
+<br><br>
+
+
+    <div class="site-section">
+      <div class="container">
+        <div class="row">
+         
+          <div class="col-md-5">
+          
+            <h3 class="heading-92913 text-black">view profile</h3>
+<table class="table" border="1">
+                      <thead>
+                        <tr>
+                          <th><B> id </B></th>
+                          <th><B> name </B></th>
+                          <th><B> emailaddress </B></th>
+                          <th> <B>phonenumber: </B></th>
+                          <th> <B>password: </B></th>
+                          <th> <B>address: </B></th>
+                          
+                          <th><B>location</B> </th>
+                          
+                            
+
+                        </tr>
+                      </thead>
+                      <tbody>
+                   <tr>
+				   <td>{{result.id}}</td>
+				   <td>{{result.name}}</td>
+				   <td>{{result.email}}</td>
+				   <td>{{result.phone}}</td>
+				    <td>{{result.password}}</td>
+				   <td>{{result.address}}</td>
+				   <td>{{result.location}}</td>
+				   
+
+				   
+				   </tr>
+                      </tbody>
+                    </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+
+   {% include 'footer.html' %}
+   {% endblock %}

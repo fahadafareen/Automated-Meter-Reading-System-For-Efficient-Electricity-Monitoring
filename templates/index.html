@@ -1,0 +1,186 @@
+{% load static %}
+{% block content %}
+{% include 'header.html' %}
+
+<!-- Hero Section -->
+<section class="energy-hero">
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Smart Energy Management System
+    </div>
+    <h1>
+      Monitor Your <span class="gradient-text">Energy</span><br>
+      Save The <span class="glow-text">Future</span>
+    </h1>
+    <p class="hero-desc">
+      Empowering consumers with real-time electricity monitoring, smart billing,
+      and intelligent analytics to reduce costs and conserve energy.
+    </p>
+    <div class="hero-actions">
+      {% if request.session.uid %}
+      {% if request.session.user == 'worker' %}
+      <a href="{% url 'worker_dash' %}" class="btn-energy btn-energy-primary"><i class="fas fa-tachometer-alt"></i> Go
+        to Worker Portal</a>
+      <a href="{% url 'logout' %}" class="btn-energy btn-energy-outline"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      {% else %}
+      <a href="{% url 'vbill' %}" class="btn-energy btn-energy-primary"><i class="fas fa-file-invoice-dollar"></i> View
+        My Bills</a>
+      <a href="{% url 'curprof' %}" class="btn-energy btn-energy-outline"><i class="fas fa-user"></i> My Profile</a>
+      {% endif %}
+      {% else %}
+      <a href="{% url 'register' %}" class="btn-energy btn-energy-primary"><i class="fas fa-user-plus"></i> Get
+        Started</a>
+      <a href="{% url 'login' %}" class="btn-energy btn-energy-outline"><i class="fas fa-sign-in-alt"></i> Login</a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- Stats Strip -->
+<div class="energy-stats animate-on-scroll">
+  <div class="energy-stat-card">
+    <div class="stat-icon bg-blue-subtle"><i class="fas fa-bolt text-blue"></i></div>
+    <div class="stat-value">10K+</div>
+    <div class="stat-label">Active Meters</div>
+  </div>
+  <div class="energy-stat-card">
+    <div class="stat-icon bg-green-subtle"><i class="fas fa-users text-green"></i></div>
+    <div class="stat-value">5K+</div>
+    <div class="stat-label">Happy Consumers</div>
+  </div>
+  <div class="energy-stat-card">
+    <div class="stat-icon bg-purple-subtle"><i class="fas fa-chart-line" style="color: #7c3aed;"></i></div>
+    <div class="stat-value">99.9%</div>
+    <div class="stat-label">Uptime</div>
+  </div>
+  <div class="energy-stat-card">
+    <div class="stat-icon bg-orange-subtle"><i class="fas fa-leaf text-orange"></i></div>
+    <div class="stat-value">30%</div>
+    <div class="stat-label">Energy Saved</div>
+  </div>
+</div>
+
+<!-- About Section -->
+<section class="energy-section">
+  <div class="section-container">
+    <div class="about-grid animate-on-scroll">
+      <div class="about-image">
+        <img src="{% static 'images/img2.jpg' %}" alt="Smart Energy Metering">
+      </div>
+      <div class="about-content">
+        <span class="energy-section .section-header .section-tag"
+          style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.4rem 1rem;background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.15);border-radius:50px;font-size:0.82rem;color:#00d4ff;font-weight:500;margin-bottom:1rem;text-transform:uppercase;letter-spacing:0.08em;">About
+          Us</span>
+        <h3>Welcome to <span class="text-gradient">EnergyMeter</span></h3>
+        <p>We provide cutting-edge smart metering solutions that help consumers understand and manage their electricity
+          consumption efficiently.</p>
+        <p>Our platform brings transparency to energy billing, empowers consumers with real-time data, and helps reduce
+          overall energy waste through intelligent analytics and monitoring.</p>
+        <a href="{% url 'register' %}" class="btn-energy btn-energy-primary mt-2"><i class="fas fa-arrow-right"></i>
+          Learn More</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="energy-section">
+  <div class="section-container">
+    <div class="section-header animate-on-scroll">
+      <span class="section-tag"><i class="fas fa-star"></i> Features</span>
+      <h2>Why Choose EnergyMeter?</h2>
+      <p>Comprehensive tools for modern energy management</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card animate-on-scroll">
+        <div class="feature-icon bg-blue-subtle"><i class="fas fa-tachometer-alt text-blue"></i></div>
+        <h4>Smart Metering</h4>
+        <p>Real-time electricity usage monitoring with smart meter integration and accurate readings.</p>
+      </div>
+      <div class="feature-card animate-on-scroll">
+        <div class="feature-icon bg-green-subtle"><i class="fas fa-file-invoice-dollar text-green"></i></div>
+        <h4>Automated Billing</h4>
+        <p>Automated bill generation with transparent pricing, due dates, and easy online payments.</p>
+      </div>
+      <div class="feature-card animate-on-scroll">
+        <div class="feature-icon bg-purple-subtle"><i class="fas fa-chart-bar" style="color: #7c3aed;"></i></div>
+        <h4>Usage Analytics</h4>
+        <p>Deep insights into your consumption patterns to help you save on electricity costs.</p>
+      </div>
+      <div class="feature-card animate-on-scroll">
+        <div class="feature-icon bg-orange-subtle"><i class="fas fa-headset text-orange"></i></div>
+        <h4>Complaint System</h4>
+        <p>Easy complaint filing and tracking to ensure swift resolution of your issues.</p>
+      </div>
+      <div class="feature-card animate-on-scroll">
+        <div class="feature-icon bg-pink-subtle"><i class="fas fa-shield-alt" style="color: #ff2d78;"></i></div>
+        <h4>Secure Payments</h4>
+        <p>Multiple secure payment options including credit and debit cards with encrypted transactions.</p>
+      </div>
+      <div class="feature-card animate-on-scroll">
+        <div class="feature-icon bg-blue-subtle"><i class="fas fa-newspaper text-blue"></i></div>
+        <h4>Latest News</h4>
+        <p>Stay updated with the latest energy news, policy changes, and helpful tips.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="energy-section">
+  <div class="section-container">
+    <div class="section-header animate-on-scroll">
+      <span class="section-tag"><i class="fas fa-quote-left"></i> Testimonials</span>
+      <h2>What Our Customers Say</h2>
+      <p>Trusted by thousands of satisfied consumers</p>
+    </div>
+    <div class="testimonial-grid">
+      <div class="testimonial-card animate-on-scroll">
+        <div class="stars">★★★★★</div>
+        <blockquote>
+          "We have a dual-rate energy tariff and the smart metering from EnergyMeter has been incredible. Night time
+          usage is averaging 40% of total — great savings!"
+        </blockquote>
+        <div class="author">
+          <img src="{% static 'images/person_3_sq.jpg' %}" alt="Customer" class="author-avatar">
+          <div class="author-info">
+            <strong>Rahul Nair</strong>
+            <span>Homeowner, Kochi</span>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card animate-on-scroll">
+        <div class="stars">★★★★★</div>
+        <blockquote>
+          "The online billing and payment system is so convenient. No more standing in queues. The complaint tracking
+          feature is also very responsive!"
+        </blockquote>
+        <div class="author">
+          <img src="{% static 'images/person_4_sq.jpg' %}" alt="Customer" class="author-avatar">
+          <div class="author-info">
+            <strong>Priya Sharma</strong>
+            <span>Business Owner, Ernakulam</span>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card animate-on-scroll">
+        <div class="stars">★★★★☆</div>
+        <blockquote>
+          "After switching to the smart meter through EnergyMeter, I can finally monitor my consumption in real-time. My
+          bills have reduced by almost 25%!"
+        </blockquote>
+        <div class="author">
+          <img src="{% static 'images/person_3_sq.jpg' %}" alt="Customer" class="author-avatar">
+          <div class="author-info">
+            <strong>Anil Kumar</strong>
+            <span>Resident, Thrissur</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% include 'footer.html' %}
+{% endblock %}

@@ -1,0 +1,153 @@
+{% load static %}
+{% block content %}
+{% include 'admin/menu.html' %}
+
+<div class="admin-main">
+    <div class="admin-content">
+        <div class="admin-page-header">
+            <h2><i class="fas fa-comments text-blue"></i> <span class="text-gradient">User Chat</span></h2>
+            <p>Reply to user messages</p>
+        </div>
+
+        <div style="display:flex; gap:1.5rem; align-items:flex-start;">
+
+            <!-- Users Sidebar -->
+            <div class="glass-card" style="width:240px; min-width:220px; padding:0; overflow:hidden; flex-shrink:0;">
+                <div class="card-header-energy" style="padding:1rem 1.2rem;">
+                    <h4 style="font-size:0.9rem;"><i class="fas fa-users text-blue"></i> Conversations</h4>
+                </div>
+                <ul style="list-style:none;margin:0;padding:0.5rem 0;">
+                    {% for u in users %}
+                    <li>
+                        <a href="?user={{ u.email }}"
+                            style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1.2rem;text-decoration:none;color:var(--text-primary);transition:background 0.2s;
+               {% if u.email == selected %}background:rgba(0,212,255,0.12);border-left:3px solid var(--accent-blue);{% else %}border-left:3px solid transparent;{% endif %}">
+                            <div
+                                style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--accent-blue),var(--accent-purple));display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <i class="fas fa-user" style="color:#fff;font-size:0.75rem;"></i>
+                            </div>
+                            <div style="overflow: hidden; flex: 1;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div
+                                        style="font-weight:{% if u.email == selected %}600{% else %}400{% endif %};font-size:0.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                                        {{ u.name }}</div>
+                                    {% if u.unread > 0 %}
+                                    <span
+                                        style="background: #ef4444; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 800; box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);">
+                                        {{ u.unread }}
+                                    </span>
+                                    {% endif %}
+                                </div>
+                                <div
+                                    style="font-size:0.7rem;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                                    {{ u.email }}</div>
+                            </div>
+                        </a>
+                    </li>
+                    {% empty %}
+                    <li style="padding:1.5rem;text-align:center;color:var(--text-muted);font-size:0.85rem;">
+                        <i class="fas fa-inbox"
+                            style="display:block;font-size:1.6rem;margin-bottom:0.4rem;opacity:0.4;"></i>
+                        No conversations yet
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Chat Window -->
+            <div class="glass-card" style="flex:1; padding:0; overflow:hidden;">
+                {% if selected %}
+                <!-- Chat Header -->
+                <div class="card-header-energy">
+                    <div style="display:flex;align-items:center;gap:0.8rem;">
+                        <div
+                            style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent-blue),var(--accent-purple));display:flex;align-items:center;justify-content:center;">
+                            <i class="fas fa-user" style="color:#fff;font-size:1rem;"></i>
+                        </div>
+                        <div>
+                            <h4 style="margin:0;font-size:1rem;">{{ selected_name }}</h4>
+                            <small style="color:var(--text-muted);">{{ selected }}</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Messages -->
+                <div id="chatBox"
+                    style="height:400px;overflow-y:auto;padding:1.5rem;display:flex;flex-direction:column;gap:0.9rem;background:rgba(0,0,0,0.15);">
+                    {% if not msgs %}
+                    <div style="text-align:center;color:var(--text-muted);margin:auto;">
+                        <i class="fas fa-comments"
+                            style="font-size:2.5rem;display:block;margin-bottom:0.6rem;opacity:0.4;"></i>
+                        <p>No messages from this user yet.</p>
+                    </div>
+                    {% endif %}
+                    {% for m in msgs %}
+                    {% if m.sender == 'admin' %}
+                    <!-- Admin sent (right) -->
+                    <div style="display:flex;justify-content:flex-end;">
+                        <div
+                            style="max-width:70%;background:linear-gradient(135deg,var(--accent-blue),var(--accent-purple));color:#fff;padding:0.75rem 1.1rem;border-radius:18px 18px 4px 18px;box-shadow:0 4px 15px rgba(0,212,255,0.2);word-break:break-word;">
+                            <p style="margin:0;font-size:0.95rem;">{{ m.message }}</p>
+                            <small style="opacity:0.7;font-size:0.7rem;display:block;text-align:right;margin-top:4px;">
+                                {{m.timestamp|date:"d M, H:i" }}</small>
+                        </div>
+                    </div>
+                    {% else %}
+                    <!-- User sent (left) -->
+                    <div style="display:flex;align-items:flex-end;gap:0.5rem;">
+                        <div
+                            style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#a78bfa);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                            <i class="fas fa-user" style="color:#fff;font-size:0.7rem;"></i>
+                        </div>
+                        <div
+                            style="max-width:70%;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:var(--text-primary);padding:0.75rem 1.1rem;border-radius:18px 18px 18px 4px;word-break:break-word;">
+                            <small
+                                style="color:#a78bfa;font-weight:600;display:block;margin-bottom:2px;font-size:0.7rem;">
+                                {{ m.sender }}</small>
+                            <p style="margin:0;font-size:0.95rem;">{{ m.message }}</p>
+                            <small style="opacity:0.5;font-size:0.7rem;display:block;margin-top:4px;">
+                                {{ m.timestamp|date:"d M, H:i" }}</small>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+
+                <!-- Reply Form -->
+                <div
+                    style="padding:1rem 1.5rem;border-top:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.1);">
+                    <form method="POST" action="/admin_chat/?user={{ selected }}"
+                        style="display:flex;gap:0.8rem;align-items:center;">
+                        {% csrf_token %}
+                        <input type="hidden" name="user" value="{{ selected }}">
+                        <input type="text" name="message" placeholder="Type your reply..." autocomplete="off"
+                            style="flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:var(--text-primary);border-radius:50px;padding:0.7rem 1.2rem;font-size:0.95rem;outline:none;transition:border 0.2s;"
+                            onfocus="this.style.borderColor='var(--accent-blue)'"
+                            onblur="this.style.borderColor='rgba(255,255,255,0.15)'" required>
+                        <button type="submit"
+                            style="width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--accent-blue),var(--accent-purple));border:none;color:#fff;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(0,212,255,0.35);transition:transform 0.2s;"
+                            onmouseover="this.style.transform='scale(1.1)'"
+                            onmouseout="this.style.transform='scale(1)'">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+
+                {% else %}
+                <div style="padding:4rem;text-align:center;color:var(--text-muted);">
+                    <i class="fas fa-comments" style="font-size:3rem;display:block;margin-bottom:1rem;opacity:0.3;"></i>
+                    <p>Select a user from the left to view their conversation.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% include 'admin/footer.html' %}
+</div>
+
+<script>
+    var chatBox = document.getElementById('chatBox');
+    if (chatBox) chatBox.scrollTop = chatBox.scrollHeight;
+</script>
+
+{% endblock %}

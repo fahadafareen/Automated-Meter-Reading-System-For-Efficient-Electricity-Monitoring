@@ -1,0 +1,228 @@
+{% load static %}
+{% block content %}
+
+{% include 'admin/menu.html' %}
+
+<div class="admin-main">
+    <div class="admin-content">
+        <div class="admin-page-header">
+            <h2><i class="fas fa-tasks" style="color: #00d4ff;"></i> <span class="text-gradient">Manage Requests</span>
+            </h2>
+            <p>Review and process consumer service applications</p>
+        </div>
+
+        <!-- Section 1: New Connections -->
+        <div class="glass-card" style="margin-bottom: 2rem;">
+            <div class="card-header-energy">
+                <h4><i class="fas fa-plus-circle text-blue"></i> New Connection Requests</h4>
+                <div class="header-icon bg-blue-subtle"><i class="fas fa-bolt text-blue"></i></div>
+            </div>
+            <div class="card-body-energy" style="padding: 0;">
+                <div style="overflow-x: auto;">
+                    <table class="table-energy">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Consumer ID</th>
+                                <th>Type</th>
+                                <th>Address</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for c in conns %}
+                            <tr>
+                                <td>{{ c.date }}</td>
+                                <td><strong style="color: var(--text-primary);">{{ c.uid }}</strong></td>
+                                <td>{{ c.connection_type }}</td>
+                                <td style="max-width: 200px;">{{ c.address }}</td>
+                                <td><span
+                                        class="status-badge {% if c.status == 'Approved' %}approved{% elif c.status == 'Rejected' %}rejected{% else %}pending{% endif %}">
+                                        {{c.status }}</span></td>
+                                <td>
+                                    {% if c.status == 'Pending' %}
+                                    <div style="display: flex; gap: 8px;">
+                                        <a href="{% url 'accept_request' 'new_conn' c.id %}"
+                                            class="btn-energy btn-energy-sm btn-energy-green"
+                                            style="padding: 0.4rem 0.8rem;"><i class="fas fa-check"></i></a>
+                                        <a href="{% url 'reject_request' 'new_conn' c.id %}"
+                                            class="btn-energy btn-energy-sm btn-energy-danger"
+                                            style="padding: 0.4rem 0.8rem;"><i class="fas fa-times"></i></a>
+                                    </div>
+                                    {% else %}-{% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 2rem;">No new connection requests.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Solar -->
+        <div class="glass-card" style="margin-bottom: 2rem;">
+            <div class="card-header-energy">
+                <h4><i class="fas fa-solar-panel text-green"></i> Solar Integration Requests</h4>
+                <div class="header-icon bg-green-subtle"><i class="fas fa-leaf text-green"></i></div>
+            </div>
+            <div class="card-body-energy" style="padding: 0;">
+                <div style="overflow-x: auto;">
+                    <table class="table-energy">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Consumer ID</th>
+                                <th>Capacity</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for s in solar %}
+                            <tr>
+                                <td>{{ s.date }}</td>
+                                <td><strong style="color: var(--text-primary);">{{ s.uid }}</strong></td>
+                                <td>{{ s.solar_capacity }} kW</td>
+                                <td><span
+                                        class="status-badge {% if s.status == 'Approved' %}approved{% elif s.status == 'Rejected' %}rejected{% else %}pending{% endif %}">
+                                        {{s.status }}</span></td>
+                                <td>
+                                    {% if s.status == 'Pending' %}
+                                    <div style="display: flex; gap: 8px;">
+                                        <a href="{% url 'accept_request' 'solar' s.id %}"
+                                            class="btn-energy btn-energy-sm btn-energy-green"
+                                            style="padding: 0.4rem 0.8rem;"><i class="fas fa-check"></i></a>
+                                        <a href="{% url 'reject_request' 'solar' s.id %}"
+                                            class="btn-energy btn-energy-sm btn-energy-danger"
+                                            style="padding: 0.4rem 0.8rem;"><i class="fas fa-times"></i></a>
+                                    </div>
+                                    {% else %}-{% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 2rem;">No solar requests.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: Name Changes -->
+        <div class="glass-card" style="margin-bottom: 2rem;">
+            <div class="card-header-energy">
+                <h4><i class="fas fa-user-edit text-purple"></i> Name Change Requests</h4>
+                <div class="header-icon bg-purple-subtle"><i class="fas fa-id-card text-purple"></i></div>
+            </div>
+            <div class="card-body-energy" style="padding: 0;">
+                <div style="overflow-x: auto;">
+                    <table class="table-energy">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Consumer ID</th>
+                                <th>New Name</th>
+                                <th>Reason</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for n in names %}
+                            <tr>
+                                <td>{{ n.date }}</td>
+                                <td><strong style="color: var(--text-primary);">{{ n.uid }}</strong></td>
+                                <td>{{ n.new_name }}</td>
+                                <td style="max-width: 200px;">{{ n.reason }}</td>
+                                <td><span
+                                        class="status-badge {% if n.status == 'Approved' %}approved{% elif n.status == 'Rejected' %}rejected{% else %}pending{% endif %}">
+                                        {{n.status }}</span></td>
+                                <td>
+                                    {% if n.status == 'Pending' %}
+                                    <div style="display: flex; gap: 8px;">
+                                        <a href="{% url 'accept_request' 'name' n.id %}"
+                                            class="btn-energy btn-energy-sm btn-energy-green"
+                                            style="padding: 0.4rem 0.8rem;"><i class="fas fa-check"></i></a>
+                                        <a href="{% url 'reject_request' 'name' n.id %}"
+                                            class="btn-energy btn-energy-sm btn-energy-danger"
+                                            style="padding: 0.4rem 0.8rem;"><i class="fas fa-times"></i></a>
+                                    </div>
+                                    {% else %}-{% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 2rem;">No name change requests.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: Tariff Changes -->
+        <div class="glass-card">
+            <div class="card-header-energy">
+                <h4><i class="fas fa-file-invoice text-orange"></i> Tariff Change Requests</h4>
+                <div class="header-icon bg-orange-subtle"><i class="fas fa-exchange-alt text-orange"></i></div>
+            </div>
+            <div class="card-body-energy" style="padding: 0;">
+                <div style="overflow-x: auto;">
+                    <table class="table-energy">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Consumer ID</th>
+                                <th>Plans (From → To)</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for t in tariffs %}
+                            <tr>
+                                <td>{{ t.date }}</td>
+                                <td><strong style="color: var(--text-primary);">{{ t.uid }}</strong></td>
+                                <td>{{ t.current_plan }} <i class="fas fa-arrow-right"
+                                        style="font-size: 0.7rem; margin: 0 5px;"></i> <strong>{{ t.new_plan }}</strong>
+                                </td>
+                                <td><span
+                                        class="status-badge {% if t.status == 'Approved' %}approved{% elif t.status == 'Rejected' %}rejected{% else %}pending{% endif %}">{{
+                                        t.status }}</span></td>
+                                <td>
+                                    {% if t.status == 'Pending' %}
+                                    <div style="display: flex; gap: 8px;">
+                                        <a href="{% url 'accept_request' 'tariff' t.id %}"
+                                            class="btn-energy btn-energy-sm btn-energy-green"
+                                            style="padding: 0.4rem 0.8rem;"><i class="fas fa-check"></i></a>
+                                        <a href="{% url 'reject_request' 'tariff' t.id %}"
+                                            class="btn-energy btn-energy-sm btn-energy-danger"
+                                            style="padding: 0.4rem 0.8rem;"><i class="fas fa-times"></i></a>
+                                    </div>
+                                    {% else %}-{% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 2rem;">No tariff requests.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    {% include 'admin/footer.html' %}
+
+    {% endblock %}

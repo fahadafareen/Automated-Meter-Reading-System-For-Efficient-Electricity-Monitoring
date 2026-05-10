@@ -1,0 +1,138 @@
+{% load static %}
+{% block content %}
+{% include 'admin/menu.html' %}
+
+<div class="admin-main">
+    <div class="admin-content">
+        <div class="admin-page-header">
+            <h2><i class="fas fa-satellite-dish" style="color: #00d4ff;"></i> <span class="text-gradient">Meter
+                    Simulator</span></h2>
+            <p>Push manual energy monitoring data to consumer meters</p>
+        </div>
+
+        <div class="glass-card animate-on-scroll" style="max-width: 600px; margin-bottom: 2rem;">
+            <div class="card-header-energy">
+                <h4><i class="fas fa-plus-circle text-blue"></i> Push Live Pulse</h4>
+                <div class="header-icon bg-blue-subtle"><i class="fas fa-broadcast-tower text-blue"></i></div>
+            </div>
+            <div class="card-body-energy">
+                <form action="{% url 'admin_simulate_monitoring' %}" method="POST">
+                    {% csrf_token %}
+                    <div style="margin-bottom: 1.2rem;">
+                        <label
+                            style="display: block; color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 0.5rem;">Select
+                            Consumer</label>
+                        <select name="uid" class="form-control-energy" required
+                            style="width: 100%; border-radius: 8px; padding: 0.8rem; background: rgba(255,255,255,0.05); color: white; border: 1px solid var(--border-glass);">
+                            {% for c in consumers %}
+                            <option value="{{ c.id }}">{{ c.name }} ({{ c.id }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.2rem;">
+                        <div>
+                            <label
+                                style="display: block; color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 0.5rem;">Current
+                                (A)</label>
+                            <input type="number" step="0.01" name="current" class="form-control-energy"
+                                placeholder="5.2" required
+                                style="width: 100%; border-radius: 8px; padding: 0.8rem; background: rgba(255,255,255,0.05); color: white; border: 1px solid var(--border-glass);">
+                        </div>
+                        <div>
+                            <label
+                                style="display: block; color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 0.5rem;">Power
+                                (W)</label>
+                            <input type="number" step="0.1" name="power" class="form-control-energy" placeholder="1250"
+                                required
+                                style="width: 100%; border-radius: 8px; padding: 0.8rem; background: rgba(255,255,255,0.05); color: white; border: 1px solid var(--border-glass);">
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 1.5rem;">
+                        <label
+                            style="display: block; color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 0.5rem;">Total
+                            Energy (kWh)</label>
+                        <input type="number" step="0.01" name="energy" class="form-control-energy" placeholder="45.8"
+                            required
+                            style="width: 100%; border-radius: 8px; padding: 0.8rem; background: rgba(255,255,255,0.05); color: white; border: 1px solid var(--border-glass);">
+                    </div>
+                    <button type="submit" class="btn-energy btn-energy-primary"
+                        style="width: 100%; justify-content: center;">
+                        <i class="fas fa-share-square"></i> Send Pulse
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="glass-card animate-on-scroll">
+            <div class="card-header-energy">
+                <h4><i class="fas fa-list text-purple"></i> Recent Data Pulses</h4>
+                <div class="header-icon bg-purple-subtle"><i class="fas fa-history text-purple"></i></div>
+            </div>
+            <div class="card-body-energy" style="padding: 0;">
+                <div style="overflow-x: auto;">
+                    <table class="table-energy">
+                        <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>uid</th>
+                                <th>current</th>
+                                <th>power</th>
+                                <th>energy</th>
+                                <th>time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pulses-body">
+                            {% for d in recent_data %}
+                            <tr>
+                                <td>{{ d.id }}</td>
+                                <td>{{ d.uid }}</td>
+                                <td>{{ d.current }}</td>
+                                <td>{{ d.power }}</td>
+                                <td>{{ d.energy }}</td>
+                                <td>{{ d.date|date:"Y-m-d H:i:s" }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 2rem;">No pulses sent yet.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include 'admin/footer.html' %}
+</div>
+
+<script>
+    function updatePulses() {
+        fetch('/get_admin_monitoring_data/')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.getElementById('pulses-body');
+                if (data.monitoring_data && data.monitoring_data.length > 0) {
+                    let html = '';
+                    data.monitoring_data.forEach(d => {
+                        html += `
+                            <tr>
+                                <td>${d.id}</td>
+                                <td>${d.uid}</td>
+                                <td>${d.current}</td>
+                                <td>${d.power}</td>
+                                <td>${d.energy}</td>
+                                <td>${d.time}</td>
+                            </tr>
+                        `;
+                    });
+                    tbody.innerHTML = html;
+                }
+            })
+            .catch(error => console.error('Error fetching pulse data:', error));
+    }
+
+    // Refresh every 5 seconds
+    setInterval(updatePulses, 5000);
+</script>
+
+{% endblock %}

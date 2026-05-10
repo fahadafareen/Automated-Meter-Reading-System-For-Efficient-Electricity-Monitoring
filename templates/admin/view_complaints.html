@@ -1,0 +1,91 @@
+{% load static %}
+{% block content %}
+
+{% include 'admin/menu.html' %}
+
+<div class="admin-main">
+    <div class="admin-content">
+        <div class="admin-page-header">
+            <h2><i class="fas fa-exclamation-circle" style="color: #ef4444;"></i> <span class="text-gradient">Consumer
+                    Complaints</span></h2>
+            <p>Manage and track issues reported by customers</p>
+        </div>
+
+        <!-- Stats Row -->
+        <div
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+            <div class="glass-card" style="padding: 1.5rem; text-align: center;">
+                <div style="font-size: 2rem; font-weight: 800; color: #ef4444;">{{ complaints.count }}</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px;">Total Complaints</div>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <div class="card-header-energy">
+                <h4><i class="fas fa-list-ul text-blue"></i> Complaint Records</h4>
+                <div class="header-icon bg-red-subtle"><i class="fas fa-clipboard-list" style="color: #ef4444;"></i>
+                </div>
+            </div>
+            <div class="card-body-energy" style="padding: 0;">
+                <div style="overflow-x: auto;">
+                    <table class="table-energy">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Consumer</th>
+                                <th>Subject</th>
+                                <th>Description</th>
+                                <th>Attachment</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for c in complaints %}
+                            <tr>
+                                <td>{{ c.date }}</td>
+                                <td>
+                                    <div style="font-weight: 700; color: var(--text-primary);">{{ c.complaintname }}
+                                    </div>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted);">ID: {{ c.cid }}</div>
+                                </td>
+                                <td style="max-width: 150px;">{{ c.complaintname }}</td>
+                                <td style="max-width: 250px; font-size: 0.85rem; color: var(--text-secondary);">
+                                {{c.description }}</td>
+                                <td>
+                                    {% if c.photoss %}
+                                    <a href="{{ c.photoss.url }}" target="_blank"
+                                        class="btn-energy btn-energy-sm btn-energy-outline"
+                                        style="padding: 0.4rem 0.8rem;">
+                                        <i class="fas fa-image"></i> View
+                                    </a>
+                                    {% else %}
+                                    <span class="text-muted">No file</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span
+                                        class="status-badge {% if c.status == 'Approved' or c.status == 'accepted' %}approved{% elif c.status == 'Rejected' or c.status == 'rejected' %}rejected{% else %}pending{% endif %}">
+                                        {{ c.status }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 4rem; color: var(--text-muted);">
+                                    <i class="fas fa-check-double"
+                                        style="font-size: 2.5rem; display: block; margin-bottom: 1rem; color: var(--accent-green);"></i>
+                                    No active complaints found. Great job!
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'admin/footer.html' %}
+</div>
+
+{% endblock %}

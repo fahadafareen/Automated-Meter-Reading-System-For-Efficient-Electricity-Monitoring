@@ -1,0 +1,54 @@
+
+
+{% load static %}
+{% block content %}
+{% include 'header.html' %}  
+
+    <!-- END slider -->
+
+    
+<br><br>
+
+
+    <div class="site-section">
+      <div class="container">
+        <div class="row">
+         
+          <div class="col-md-5">
+          
+            <h3 class="heading-92913 text-black">Register</h3>
+<table class="table" border="1">
+                      <thead>
+                        <tr>
+                          <th><B> id </B></th>
+                          <th><B> complaintname </B></th>
+                          <th> <B>description: </B></th>
+                          <th><B>date:</B> </th>
+                          <th><B>STATUS:</B></th>
+                            
+
+                        </tr>
+                      </thead>
+                      <tbody>
+{% for i in result %}
+                   <tr>
+				   <td>{{i.id}}</td>
+				   <td>{{i.complaintname}}</td>
+				    <td>{{i.description}}</td>
+				   <td>{{i.date}}</td>
+				   <td>{{i.status}}</td>
+
+				   
+				   </tr>
+				   {% endfor %}
+                      </tbody>
+                    </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+
+   {% include 'footer.html' %}
+   {% endblock %}

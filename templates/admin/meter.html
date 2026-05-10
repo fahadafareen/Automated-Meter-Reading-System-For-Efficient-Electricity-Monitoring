@@ -1,0 +1,38 @@
+{% load static %}
+{% block content %}
+
+{% include 'admin/menu.html' %}
+
+<div class="admin-main">
+  <div class="admin-content">
+    <div class="admin-page-header">
+      <h2><i class="fas fa-bolt text-blue"></i> <span class="text-gradient">Add Electricity</span></h2>
+      <p>Register a new electricity meter</p>
+    </div>
+
+    <div class="glass-card" style="max-width: 600px;">
+      <div class="card-header-energy">
+        <h4><i class="fas fa-plug text-blue"></i> New Meter</h4>
+        <div class="header-icon bg-blue-subtle"><i class="fas fa-bolt text-blue"></i></div>
+      </div>
+      <div class="card-body-energy">
+        <form method="POST" action="{% url 'mtr' %}" class="form-energy">
+          {% csrf_token %}
+
+          <div class="form-group-energy">
+            <label><i class="fas fa-hashtag"></i> Meter Number (Auto-generated)</label>
+            <input type="text" name="number" class="form-input" value="{{ meter_no }}" readonly required>
+          </div>
+
+          <input type="hidden" name="name" value="pending">
+
+          <button type="submit" class="btn-energy btn-energy-primary" style="width: 100%; justify-content: center;">
+            <i class="fas fa-plus-circle"></i> Add Meter
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  {% include 'admin/footer.html' %}
+  {% endblock %}
